@@ -19,18 +19,18 @@ echo $SOURCEFILE
 echo $PROGRESS
 echo $FOLDERNAME
 
-touch $PROGRESS
-echo "Processing $SOURCEFILE" >> $PROGRESS
+touch $FOLDERNAME/$PROGRESS
+echo "Processing $SOURCEFILE" >> $FOLDERNAME/$PROGRESS
 sleep 1
-echo "Audio length = XXXXXX" >> $PROGRESS
+echo "Audio length = XXXXXX" >> $FOLDERNAME/$PROGRESS
 sleep 1
-echo "20" >> $PROGRESS
+echo "20" >> $FOLDERNAME/$PROGRESS
 sleep 10
-echo "60" >> $PROGRESS
+echo "60" >> $FOLDERNAME/$PROGRESS
 sleep 1
-echo "100" >> $PROGRESS
+echo "100" >> $FOLDERNAME/$PROGRESS
 sleep 1
-touch ${SOURCEFILE}.${OUTFORMAT}
-echo "-1"  >> $PROGRESS
+touch $FOLDERNAME/${SOURCEFILE}.${OUTFORMAT}
+echo "-1"  >> $FOLDERNAME/$PROGRESS
 echo "----> HOTOWE <----"
 
