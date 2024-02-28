@@ -42,6 +42,18 @@ app.get('/status', async (req, res) => {
   })
 })
 
+app.get('/download', async (req, res) => {
+  if (req.query.filename === undefined) {
+    return res.status(400).send('Filename is required')
+  }
+  if (req.query.token === undefined) {
+    return res.status(400).send('Filename is required')
+  }
+  const file = `uploads/${req.query.token}/${req.query.filename}`
+
+  return res.download(file) // Set disposition and send it.
+})
+
 app.post('/upload', upload.single('file'), async (req, res) => {
   const { token, fileName, languageModel, outputFormat } = req.body
 
