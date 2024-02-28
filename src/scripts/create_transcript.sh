@@ -30,6 +30,7 @@ echo "60" >> $PROGRESS
 sleep 1
 echo "100" >> $PROGRESS
 sleep 1
+echo "generate outfile: ${SOURCEFILE}.${OUTFORMAT}"
 touch ${SOURCEFILE}.${OUTFORMAT}
 echo "-1"  >> $PROGRESS
 echo "----> HOTOWE <----"
