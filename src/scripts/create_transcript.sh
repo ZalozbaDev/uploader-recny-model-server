@@ -27,7 +27,7 @@ sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 echo "20" >> $PROGRESS
 LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 echo "60" >> $PROGRESS
-python3 log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
+python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
 echo "80" >> $PROGRESS
 mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
 echo "100" >> $PROGRESS
