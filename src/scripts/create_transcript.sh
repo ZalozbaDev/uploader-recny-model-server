@@ -21,17 +21,17 @@ echo $FOLDERNAME
 
 touch $PROGRESS
 echo "Processing $SOURCEFILE" >> $PROGRESS
-sleep 1
+ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
 echo "Audio length = XXXXXX" >> $PROGRESS
-sleep 1
+sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 echo "20" >> $PROGRESS
-sleep 10
+LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 echo "60" >> $PROGRESS
-sleep 1
+python3 log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
+echo "80" >> $PROGRESS
+mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
 echo "100" >> $PROGRESS
 sleep 1
-echo "generate outfile: ${SOURCEFILE}.${OUTFORMAT}"
-touch ${SOURCEFILE}.${OUTFORMAT}
 echo "-1"  >> $PROGRESS
 echo "----> HOTOWE <----"
 
