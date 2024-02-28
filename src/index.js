@@ -18,8 +18,10 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let token = req.body.token
     let path = `./uploads/${token}`
-    fs.mkdirSync(path)
-    cb(null, path)
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path)
+      cb(null, path)
+    }
   },
   filename: function (req, file, cb) {
     cb(null, `/${file.originalname}`)
@@ -38,7 +40,11 @@ app.get('/status', async (req, res) => {
       res.status(400).send('Error')
     }
 
-    res.send(stdout)
+    res.send({
+      done: stdout.split('|')[0] === '100',
+      status: stdout.split('|')[0],
+      message: stdout.split('|')[1]
+    })
   })
 })
 
@@ -66,19 +72,17 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     return res.status(400).send('token, fileName, languageModel, outputFormat is required')
   }
 
+  res.status(200).send('File uploaded successfully')
+
   exec(
     `src/scripts/create_transcript.sh ${token} uploads/${token}/${fileName} ${languageModel} ${outputFormat} uploads/${token}/progress.txt`,
     (error, stdout, stderr) => {
-      console.log(stdout)
-      console.log(stderr)
       if (error !== null) {
         console.log(`exec error: ${error}`)
         return res.status(400).send('Error')
       }
     }
   )
-
-  return res.send('Start')
 })
 
 app.listen(port, () => {

@@ -20,17 +20,18 @@ echo $PROGRESS
 echo $FOLDERNAME
 
 touch $PROGRESS
-echo "Processing $SOURCEFILE" >> $PROGRESS
-sleep 1
-echo "Audio length = XXXXXX" >> $PROGRESS
-sleep 1
-echo "20" >> $PROGRESS
-sleep 10
-echo "60" >> $PROGRESS
-sleep 1
-echo "100" >> $PROGRESS
-sleep 1
-touch ${SOURCEFILE}.${OUTFORMAT}
-echo "-1"  >> $PROGRESS
-echo "----> HOTOWE <----"
 
+# TODO: caluculate duration of the file calculation
+echo "0|Processing $SOURCEFILE" >> $PROGRESS
+sleep 5
+DURATION=12345 # in seconds
+(echo $DURATION && cat $PROGRESS) > progress.tmp && mv progress.tmp $PROGRESS && rm progress.tmp # Set duration to the first line of the file
+
+echo "10|Calculating Audio length" >> $PROGRESS
+sleep 1
+echo "20|Do abc" >> $PROGRESS
+sleep 1
+echo "60|And do that" >> $PROGRESS
+sleep 1
+echo "100|Cool" >> $PROGRESS
+touch ${SOURCEFILE}.${OUTFORMAT}
