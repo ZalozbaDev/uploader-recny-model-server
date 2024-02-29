@@ -38,11 +38,13 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe ($DURATION)" >> $PROGRESS
-		if [ "$OUTFORMAT" = "srt" ]; then
+		if [ "$OUTFORMAT" = "SRT" ]; then
 			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
+			mv $SOURCEFILE.wav.resample.wav.srt $SOURCEFILE.srt
 			echo "100|Podtitle hotowe" >> $PROGRESS
 		else
 			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-srt -f $SOURCEFILE.wav.resample.wav
+			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.txt
 			echo "100|Tekst hotowe" >> $PROGRESS
 		fi
 		;;
@@ -52,7 +54,7 @@ case $MODEL in
 		;;
 	
 	BOZA_MSA)
-		if [ "$OUTFORMAT" = "srt" ]; then
+		if [ "$OUTFORMAT" = "SRT" ]; then
 			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
 			DURATION=$(soxi -D $SOURCEFILE.wav)
