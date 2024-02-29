@@ -38,7 +38,7 @@ case $MODEL in
 		;;
 	
 	BOZA_MSA)
-		if [ "$OUTFORMAT" = "TXT" ]; then
+		if [ "$OUTFORMAT" = "SRT" ]; then
 			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
 			DURATION=$(soxi -d $SOURCEFILE.wav)
