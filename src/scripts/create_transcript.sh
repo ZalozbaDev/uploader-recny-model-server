@@ -44,7 +44,7 @@ case $MODEL in
 			echo "100|Podtitle hotowe" >> $PROGRESS
 		else
 			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
-			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.txt
+			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.text
 			echo "100|Tekst hotowe" >> $PROGRESS
 		fi
 		;;
