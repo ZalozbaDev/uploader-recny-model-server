@@ -41,8 +41,8 @@ case $MODEL in
 		if [ "$OUTFORMAT" = "srt" ]; then
 			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -d $SOURCEFILE.wav)
-			echo "10|Dołhosć = $DURATION" > $PROGRESS.tmp
+			DURATION=$(soxi -D $SOURCEFILE.wav)
+			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
 			cat $PROGRESS >> $PROGRESS.tmp
 			mv $PROGRESS.tmp $PROGRESS
 			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
@@ -62,8 +62,8 @@ case $MODEL in
 	DEVEL)
 		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 		sleep 1
-		DURATION="00:01:05.88"
-		echo "10|Dołhosć = $DURATION" > $PROGRESS.tmp
+		DURATION="175"
+		echo $DURATION > $PROGRESS.tmp
 		cat $PROGRESS >> $PROGRESS.tmp
 		mv $PROGRESS.tmp $PROGRESS
 		sleep 1
