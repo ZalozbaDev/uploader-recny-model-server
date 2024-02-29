@@ -30,7 +30,21 @@ case $MODEL in
 		;;
 	
 	HF)
-		echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe ($DURATION)" >> $PROGRESS
+		if [ "$OUTFORMAT" = "srt" ]; then
+			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-srt -f $SOURCEFILE.wav.resample.wav
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
 		;;
 	
 	FB)
