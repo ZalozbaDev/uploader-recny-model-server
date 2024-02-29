@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 import dotenv from 'dotenv'
 import { parseOutputFormat } from './helpers/parser.js'
 import { upload } from './multer.js'
+import { LanguageModel, OutputFormat, isOutputFormat } from './types/common.js'
 
 //For env File
 dotenv.config()
@@ -42,11 +43,21 @@ app.get('/download', async (req: Request, res: Response) => {
     return res.status(400).send('Filename is required')
   }
   if (req.query.token === undefined) {
-    return res.status(400).send('Filename is required')
+    return res.status(400).send('Token is required')
   }
-  const file = `uploads/${req.query.token}/${req.query.filename}`
+  if (req.query.outputFormat === undefined) {
+    return res.status(400).send('OutputFormat is required')
+  }
 
-  return res.download(file)
+  if (isOutputFormat(req.query.outputFormat)) {
+    const file = `uploads/${req.query.token}/${req.query.filename}.${parseOutputFormat(
+      req.query.outputFormat
+    )}`
+
+    return res.download(file)
+  } else {
+    return res.status(400).send('Invalid filepath')
+  }
 })
 
 app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
