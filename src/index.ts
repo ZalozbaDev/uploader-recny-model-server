@@ -1,9 +1,10 @@
-import express from 'express'
-import dotenv from 'dotenv'
+import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { exec } from 'child_process'
 import multer from 'multer'
 import * as fs from 'fs'
+import dotenv from 'dotenv'
+
 //For env File
 dotenv.config()
 
@@ -30,7 +31,7 @@ var storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-app.get('/status', async (req, res) => {
+app.get('/status', async (req: Request, res: Response) => {
   if (req.query.token === undefined) {
     res.status(400).send('Token is required')
   }
@@ -53,7 +54,7 @@ app.get('/status', async (req, res) => {
   })
 })
 
-app.get('/download', async (req, res) => {
+app.get('/download', async (req: Request, res: Response) => {
   if (req.query.filename === undefined) {
     return res.status(400).send('Filename is required')
   }
@@ -65,7 +66,7 @@ app.get('/download', async (req, res) => {
   return res.download(file) // Set disposition and send it.
 })
 
-app.post('/upload', upload.single('file'), async (req, res) => {
+app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
   const { token, fileName, languageModel, outputFormat } = req.body
 
   if (
@@ -76,6 +77,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   ) {
     return res.status(400).send('token, fileName, languageModel, outputFormat is required')
   }
+
+  // TODO: parseOutputFormat
 
   res.status(200).send('File uploaded successfully')
 
