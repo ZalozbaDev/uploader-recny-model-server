@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { exec } from 'child_process'
-import multer from 'multer'
-import * as fs from 'fs'
 import dotenv from 'dotenv'
+import { parseOutputFormat } from './helpers/parser.js'
+import { upload } from './multer.js'
 
 //For env File
 dotenv.config()
@@ -13,23 +13,6 @@ app.use(cors())
 app.use(express.json())
 
 const port = process.env.PORT || 8000
-
-// setup multer for file upload
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    let token = req.body.token
-    let path = `./uploads/${token}`
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path)
-      cb(null, path)
-    }
-  },
-  filename: function (req, file, cb) {
-    cb(null, `/${file.originalname}`)
-  }
-})
-
-const upload = multer({ storage: storage })
 
 app.get('/status', async (req: Request, res: Response) => {
   if (req.query.token === undefined) {
@@ -63,11 +46,16 @@ app.get('/download', async (req: Request, res: Response) => {
   }
   const file = `uploads/${req.query.token}/${req.query.filename}`
 
-  return res.download(file) // Set disposition and send it.
+  return res.download(file)
 })
 
 app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
-  const { token, fileName, languageModel, outputFormat } = req.body
+  const { token, fileName, languageModel, outputFormat } = req.body as {
+    token: string | undefined
+    fileName: string | undefined
+    languageModel: LanguageModel | undefined
+    outputFormat: OutputFormat | undefined
+  }
 
   if (
     token === undefined ||
@@ -83,7 +71,9 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   res.status(200).send('File uploaded successfully')
 
   exec(
-    `src/scripts/create_transcript.sh ${token} uploads/${token}/${fileName} ${languageModel} ${outputFormat} uploads/${token}/progress.txt`,
+    `src/scripts/create_transcript.sh ${token} uploads/${token}/${fileName} ${languageModel} ${parseOutputFormat(
+      outputFormat
+    )} uploads/${token}/progress.txt`,
     (error, stdout, stderr) => {
       if (error !== null) {
         console.log(`exec error: ${error}`)
