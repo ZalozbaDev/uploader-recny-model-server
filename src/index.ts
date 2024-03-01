@@ -3,8 +3,9 @@ import cors from 'cors'
 import { exec } from 'child_process'
 import dotenv from 'dotenv'
 import { parseOutputFormat } from './helpers/parser.js'
-import { upload } from './multer.js'
+import { upload } from './helpers/multer.ts'
 import { LanguageModel, OutputFormat, isOutputFormat } from './types/common.js'
+import { sanitize } from './helpers/sanitize.js'
 
 //For env File
 dotenv.config()
@@ -49,8 +50,9 @@ app.get('/download', async (req: Request, res: Response) => {
     return res.status(400).send('OutputFormat is required')
   }
 
+  const sanitizedFilename = sanitize(`${req.query.filename}`)
   if (isOutputFormat(req.query.outputFormat)) {
-    const file = `uploads/${req.query.token}/${req.query.filename}.${parseOutputFormat(
+    const file = `uploads/${req.query.token}/${sanitizedFilename}.${parseOutputFormat(
       req.query.outputFormat
     )}`
 
@@ -76,13 +78,12 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   ) {
     return res.status(400).send('token, fileName, languageModel, outputFormat is required')
   }
-
-  // TODO: parseOutputFormat
+  const sanitizedFilename = sanitize(fileName)
 
   res.status(200).send('File uploaded successfully')
 
   exec(
-    `src/scripts/create_transcript.sh ${token} uploads/${token}/${fileName} ${languageModel} ${parseOutputFormat(
+    `src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
       outputFormat
     )} uploads/${token}/progress.txt`,
     (error, stdout, stderr) => {
