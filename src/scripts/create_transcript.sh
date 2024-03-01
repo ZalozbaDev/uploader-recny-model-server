@@ -50,7 +50,27 @@ case $MODEL in
 		;;
 	
 	FB)
-		echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
+		if [ "$OUTFORMAT" = "text" ]; then
+			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+			DURATION=$(soxi -D $SOURCEFILE.wav)
+			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+			cat $PROGRESS >> $PROGRESS.tmp
+			mv $PROGRESS.tmp $PROGRESS
+			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+			echo "20|Resampling hotowe" >> $PROGRESS
+			echo "test test test" > $SOURCEFILE.trl.resample.trl
+			export USER=$FOLDERNAME
+			pushd /fairseq
+			source bin/activate
+			python /fairseq/examples/mms/asr/infer/mms_infer.py --model /fairseqdata/mms1b_all.pt  --lang hsb --audio /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav --format letter > /uploader-recny-model-server/$SOURCEFILE.log
+			popd
+			echo "80|Spóznawanje hotowe" >> $PROGRESS
+			mv $SOURCEFILE.log ${SOURCEFILE}.${OUTFORMAT}
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
+		fi
 		;;
 	
 	BOZA_MSA)
