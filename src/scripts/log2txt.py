@@ -81,7 +81,7 @@ with open(log_file, 'r') as file:
 
             fn=l[1].split('.')[:-1][0]
             print(fn)
-            f=open(fn + '.txt','w',encoding='utf-8')
+            f=open(fn + '.rawtxt','w',encoding='utf-8')
 
         elif 'Result' in l[0]: # full Result line
             l = [l[0],l[1]+']',l[3],l[4]] #re-arange
