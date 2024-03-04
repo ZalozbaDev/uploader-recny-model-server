@@ -102,12 +102,15 @@ case $MODEL in
 		echo $DURATION > $PROGRESS.tmp
 		cat $PROGRESS >> $PROGRESS.tmp
 		mv $PROGRESS.tmp $PROGRESS
+		cp $SOURCEFILE $SOURCEFILE.wav
+		cp $SOURCEFILE.wav $SOURCEFILE.wav.resample.wav
 		sleep 1
 		echo "20|Resampling hotowe ($DURATION)" >> $PROGRESS
+		cp $SOURCEFILE.wav.resample.wav $SOURCEFILE.wav.resample.wav.rec.log
 		sleep 5
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		sleep 1
-		touch ${SOURCEFILE}.${OUTFORMAT}
+		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.${OUTFORMAT}
 		echo "100|Podtitle hotowe" >> $PROGRESS
 		# echo "-1"  >> $PROGRESS
 		echo "----> HOTOWE <----"
