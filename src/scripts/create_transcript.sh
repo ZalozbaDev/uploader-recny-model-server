@@ -101,7 +101,7 @@ case $MODEL in
 			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
-			mv uploads/${FOLDERNAME}/$*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
+			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
 			echo "100|Tekst hotowe" >> $PROGRESS
 			echo "----> HOTOWE <----"
 		fi
