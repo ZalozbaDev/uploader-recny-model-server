@@ -1,3 +1,5 @@
+import { removeExtension } from './parser.ts'
+
 const illegalRe = /[\/\?<>\\:\*\|"]/g
 const controlRe = /[\x00-\x1f\x80-\x9f]/g
 const reservedRe = /^\.+$/
@@ -11,7 +13,8 @@ const punctions5 = /[\u007b]/g
 const punctions6 = /[\u00a0-\u3000]/g
 
 export const sanitize = (input: string, replacement: string = '') => {
-  const sanitized = input
+  const extension = input.split('.').pop() ?? 'none'
+  const sanitized = removeExtension(input)
     .normalize('NFD')
     .replace(illegalRe, replacement)
     .replace(controlRe, replacement)
@@ -27,5 +30,5 @@ export const sanitize = (input: string, replacement: string = '') => {
     .replace(punctions6, replacement)
 
   if (sanitized.length === 0) return 'dataja'
-  return sanitized
+  return `${sanitized}.${extension}`
 }
