@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import cors from 'cors'
 import { exec } from 'child_process'
 import dotenv from 'dotenv'
-import { parseOutputFormat } from './helpers/parser.js'
+import { parseOutputFormat, removeExtension } from './helpers/parser.js'
 import { upload } from './helpers/multer.ts'
 import { LanguageModel, OutputFormat, isOutputFormat } from './types/common.js'
 import { sanitize } from './helpers/sanitize.js'
@@ -51,7 +51,9 @@ app.get('/download', async (req: Request, res: Response) => {
   }
   const sanitizedFilename = sanitize(filename)
   if (isOutputFormat(outputFormat)) {
-    const file = `uploads/${token}/${sanitizedFilename}.${parseOutputFormat(outputFormat)}`
+    const file = `uploads/${token}/${removeExtension(sanitizedFilename)}.${parseOutputFormat(
+      outputFormat
+    )}`
 
     return res.download(file)
   } else {
