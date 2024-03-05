@@ -41,10 +41,12 @@ case $MODEL in
 		if [ "$OUTFORMAT" = "srt" ]; then
 			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-srt -f $SOURCEFILE.wav.resample.wav
 			mv $SOURCEFILE.wav.resample.wav.srt $SOURCEFILE.srt
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
 		else
 			/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
 			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.text
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
 			echo "100|Tekst hotowe" >> $PROGRESS
 		fi
 		;;
@@ -67,6 +69,7 @@ case $MODEL in
 			popd
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			mv $SOURCEFILE.log ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
 			echo "100|Podtitle hotowe" >> $PROGRESS
 		else
 			echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
@@ -87,11 +90,25 @@ case $MODEL in
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
-			# echo "-1"  >> $PROGRESS
 			echo "----> HOTOWE <----"
 		else
-			echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
+			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+			DURATION=$(soxi -D $SOURCEFILE.wav)
+			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+			cat $PROGRESS >> $PROGRESS.tmp
+			mv $PROGRESS.tmp $PROGRESS
+			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+			echo "20|Resampling hotowe" >> $PROGRESS
+			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			echo "80|Spóznawanje hotowe" >> $PROGRESS
+			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
+			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+			echo "----> HOTOWE <----"
 		fi
 		;;
 		
@@ -111,6 +128,7 @@ case $MODEL in
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		sleep 1
 		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.${OUTFORMAT}
+		ln -s $(basename $SOURCEFILE.${OUTFORMAT}) $(echo "${SOURCEFILE%.*}".${OUTFORMAT})
 		echo "100|Podtitle hotowe" >> $PROGRESS
 		# echo "-1"  >> $PROGRESS
 		echo "----> HOTOWE <----"
