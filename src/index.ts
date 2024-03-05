@@ -40,21 +40,18 @@ app.get('/status', async (req: Request, res: Response) => {
 })
 
 app.get('/download', async (req: Request, res: Response) => {
-  if (req.query.filename === undefined) {
-    return res.status(400).send('Filename is required')
-  }
-  if (req.query.token === undefined) {
-    return res.status(400).send('Token is required')
-  }
-  if (req.query.outputFormat === undefined) {
-    return res.status(400).send('OutputFormat is required')
+  const { token, filename, outputFormat } = req.query as {
+    token: string | undefined
+    filename: string | undefined
+    outputFormat: OutputFormat | undefined
   }
 
-  const sanitizedFilename = sanitize(`${req.query.filename}`)
-  if (isOutputFormat(req.query.outputFormat)) {
-    const file = `uploads/${req.query.token}/${sanitizedFilename}.${parseOutputFormat(
-      req.query.outputFormat
-    )}`
+  if (token === undefined || filename === undefined || outputFormat === undefined) {
+    return res.status(400).send('token, filename, outputFormat is required')
+  }
+  const sanitizedFilename = sanitize(filename)
+  if (isOutputFormat(outputFormat)) {
+    const file = `uploads/${token}/${sanitizedFilename}.${parseOutputFormat(outputFormat)}`
 
     return res.download(file)
   } else {
@@ -63,22 +60,22 @@ app.get('/download', async (req: Request, res: Response) => {
 })
 
 app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
-  const { token, fileName, languageModel, outputFormat } = req.body as {
+  const { token, filename, languageModel, outputFormat } = req.body as {
     token: string | undefined
-    fileName: string | undefined
+    filename: string | undefined
     languageModel: LanguageModel | undefined
     outputFormat: OutputFormat | undefined
   }
 
   if (
     token === undefined ||
-    fileName === undefined ||
+    filename === undefined ||
     languageModel === undefined ||
     outputFormat === undefined
   ) {
-    return res.status(400).send('token, fileName, languageModel, outputFormat is required')
+    return res.status(400).send('token, filename, languageModel, outputFormat is required')
   }
-  const sanitizedFilename = sanitize(fileName)
+  const sanitizedFilename = sanitize(filename)
 
   res.status(200).send('File uploaded successfully')
 
