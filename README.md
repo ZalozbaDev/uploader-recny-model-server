@@ -33,9 +33,13 @@ git clone https://huggingface.co/spaces/Korla/hsb_stt_demo
 
 git clone https://github.com/openai/whisper
 
+cd whisper.cpp/
+
 mkdir -p output/hsb/whisper_small
 
 python3 ./models/convert-h5-to-ggml.py  ../hsb_stt_demo/hsb_whisper/ ../whisper/ output/hsb/whisper_small
+
+cd ../../
 ```
 
 #### model do rjadowaka kopěrować
@@ -43,7 +47,7 @@ python3 ./models/convert-h5-to-ggml.py  ../hsb_stt_demo/hsb_whisper/ ../whisper/
 ```code
 mkdir -p whisper/hsb/whisper_small/
 
-cp tmp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
+cp tmp/whisper.cpp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
 ```
 
 ## fairseq
