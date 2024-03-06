@@ -60,5 +60,5 @@ wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
 
 ## Container wuwjesć
 
-TBD
+Hlej dokumentacija hłownej aplikacije: [tule](https://github.com/ZalozbaDev/uploader-recny-model) 
 
