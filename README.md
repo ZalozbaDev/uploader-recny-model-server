@@ -11,7 +11,7 @@ docker build -f docker/Dockerfile -t offline_transcription_back .
 Wotpowědne rjadowaki wutworić
 
 ```code
-mkdir -p proprietary whisper fairseq
+mkdir -p proprietary whisper fairseqdata
 ```
 
 ### proprietary
@@ -50,10 +50,10 @@ mkdir -p whisper/hsb/whisper_small/
 cp tmp/whisper.cpp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
 ```
 
-## fairseq
+## fairseqdata
 
 ```code
-cd fairseq
+cd fairseqdata
 
 wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
 ```
