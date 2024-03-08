@@ -62,3 +62,7 @@ wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
 
 Hlej dokumentacija hłownej aplikacije: [tule](https://github.com/ZalozbaDev/uploader-recny-model) 
 
+# Licenca
+
+Hlej dataja "LICENSE".
+
