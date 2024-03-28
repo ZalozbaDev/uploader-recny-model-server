@@ -16,4 +16,7 @@ export enum LexFormat {
 
 export const isLexFormat = (x: any): x is LexFormat => x in LexFormat
 
-export type SERVER_MODE = 'FONETISIKI_SLOWNIK' | 'TRANSKRIPT'
+export enum SERVER_MODE {
+  'FONETISIKI_SLOWNIK' = 'FONETISIKI_SLOWNIK',
+  'TRANSKRIPT' = 'TRANSKRIPT'
+}

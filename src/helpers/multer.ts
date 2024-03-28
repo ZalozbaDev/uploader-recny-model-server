@@ -10,6 +10,13 @@ const storage = multer.diskStorage({
       fs.mkdirSync(path)
       cb(null, path)
     }
+    if (process.env.SERVER_MODE === 'FONETISIKI_SLOWNIK') {
+      path = `./uploads/${token}/${file.fieldname}`
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path)
+        cb(null, path)
+      }
+    }
   },
   filename: function (req, file, cb) {
     cb(null, `/${file.originalname}`)
