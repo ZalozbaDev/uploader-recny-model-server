@@ -7,3 +7,13 @@ export enum OutputFormat {
   'SRT' = 'SRT'
 }
 export const isOutputFormat = (x: any): x is OutputFormat => x in OutputFormat
+
+export enum LexFormat {
+  'SAMPA' = 'SAMPA',
+  'KALDI' = 'KALDI',
+  'UASR' = 'UASR'
+}
+
+export const isLexFormat = (x: any): x is LexFormat => x in LexFormat
+
+export type SERVER_MODE = 'FONETISIKI_SLOWNIK' | 'TRANSKRIPT'

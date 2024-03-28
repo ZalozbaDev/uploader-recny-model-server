@@ -5,14 +5,20 @@
   "main": "index.ts",
   "scripts": {
     "start": "tsx src/index.ts",
+    "start:slownik": "SERVER_MODE=FONETISIKI_SLOWNIK npm start",
+    "start:transcript": "SERVER_MODE=TRANSKRIPT npm start",
     "dev": "tsx watch src/index.ts",
+    "dev:slownik": "SERVER_MODE=FONETISIKI_SLOWNIK npm run dev",
+    "dev:transcript": "SERVER_MODE=TRANSKRIPT npm run dev",
     "build": "tsc",
     "serve": "node dist/index.js",
+    "serve:slownik": "SERVER_MODE=FONETISIKI_SLOWNIK npm run serve",
+    "serve:transcript": "SERVER_MODE=TRANSKRIPT npm run serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "FSCoding GmbH",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

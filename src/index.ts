@@ -95,5 +95,5 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
 })
 
 app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`)
+  console.log(`Server ${process.env.SERVER_MODE} is Fire at http://localhost:${port} 🚀`)
 })
