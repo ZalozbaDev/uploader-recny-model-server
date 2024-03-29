@@ -4,7 +4,7 @@ import { exec } from 'child_process'
 import dotenv from 'dotenv'
 import { parseOutputFormat, removeExtension } from './helpers/parser.js'
 import { upload } from './helpers/multer.ts'
-import { LanguageModel, OutputFormat, isOutputFormat } from './types/common.js'
+import { LanguageModel, OutputFormat, SERVER_MODE, isOutputFormat } from './types/common.js'
 import { sanitize } from './helpers/sanitize.js'
 
 //For env File
@@ -14,7 +14,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const port = process.env.PORT || 8000
+const port =
+  (process.env.SERVER_MODE as SERVER_MODE) === 'FONETISIKI_SLOWNIK'
+    ? process.env.PORT_SLOWNIK
+    : process.env.PORT_TRANSCRIPT
 
 app.get('/status', async (req: Request, res: Response) => {
   if (req.query.token === undefined) {
@@ -61,8 +64,8 @@ app.get('/download', async (req: Request, res: Response) => {
   }
 })
 
-switch (process.env.SERVER_MODE) {
-  case 'TRANSKRIPT':
+switch (process.env.SERVER_MODE as SERVER_MODE) {
+  case 'TRANSCRIPT':
     app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
       const { token, filename, languageModel, outputFormat } = req.body as {
         token: string | undefined
