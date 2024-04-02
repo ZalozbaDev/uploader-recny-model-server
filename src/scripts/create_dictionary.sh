@@ -54,6 +54,8 @@ popd
 
 echo "80|Słownik hotowe" >> $PROGRESS
 
+# resulting file is here: uploads/$FOLDERNAME/corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.EXTENSION
+
 case $OUTFORMAT in
 
 	SAMPA)
