@@ -59,14 +59,17 @@ echo "80|Słownik hotowe" >> $PROGRESS
 case $OUTFORMAT in
 
 	SAMPA)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.lex $(echo "${SOURCEFILE%.*}".lex)
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
 	KALDI)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.klex $(echo "${SOURCEFILE%.*}".klex)
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
 	UASR)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.ulex $(echo "${SOURCEFILE%.*}".ulex)
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
