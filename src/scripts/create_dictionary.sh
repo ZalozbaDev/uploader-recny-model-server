@@ -2,9 +2,10 @@
 
 if [ "$#" -ne 8 ]; then
 	echo "need to run this script with the following arguments:"
-	echo "./create_transcript.sh FOLDER DUMMYSOURCEFILENAME DUMMYLANGUAGEMODEL PHONMAP EXCEPTIONS CORPUS OUTPUTFORMAT PROGRESSFILE"
+	echo "./create_dictionary.sh FOLDER DUMMYSOURCEFILENAME DUMMYLANGUAGEMODEL PHONMAP EXCEPTIONS CORPUS OUTPUTFORMAT PROGRESSFILE"
 	echo "Example:"
-	echo "./create_transcript.sh 672536cdbea8737853 dummycorpus dummy LEX phonmap.txt exceptions.txt corpus.vocab progress.txt"
+	echo "./create_dictionary.sh 672536cdbea8737853 dummycorpus dummy phonmap.txt exceptions.txt corpus.vocab SAMPA progress.txt"
+	echo "100|Error in number args $1 $2 $3 $4 $5 $6 $7 $8" > $PROGRESS
 	exit -1
 fi
 
@@ -27,12 +28,14 @@ echo "Phonmap=$PHONMAP"
 echo "Exceptions=$EXCEPTIONS"
 echo "Corpus=$CORPUS"
 
+touch $PROGRESS
+
 echo "0|Wobdźěłam $CORPUS" >> $PROGRESS
 
 # copy tooling and config from external repo
 mkdir -p uploads/$FOLDERNAME/corpus_creator/
-cp /speech_recognition_corpus_creation/examples/ex9/configuration uploads/$FOLDERNAME/corpus_creator/
-cp /speech_recognition_corpus_creation/examples/ex9/tooling       uploads/$FOLDERNAME/corpus_creator/
+cp -r /speech_recognition_corpus_creation/examples/ex9/configuration uploads/$FOLDERNAME/corpus_creator/
+cp -r /speech_recognition_corpus_creation/examples/ex9/tooling       uploads/$FOLDERNAME/corpus_creator/
 mkdir -p uploads/$FOLDERNAME/corpus_creator/resources/
 
 echo "10" > $PROGRESS.tmp # strip the decimal part
