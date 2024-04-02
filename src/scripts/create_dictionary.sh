@@ -5,7 +5,7 @@ if [ "$#" -ne 8 ]; then
 	echo "./create_dictionary.sh FOLDER DUMMYSOURCEFILENAME DUMMYLANGUAGEMODEL PHONMAP EXCEPTIONS CORPUS OUTPUTFORMAT PROGRESSFILE"
 	echo "Example:"
 	echo "./create_dictionary.sh 672536cdbea8737853 dummycorpus dummy phonmap.txt exceptions.txt corpus.vocab SAMPA progress.txt"
-	echo "100|Error in number args $1 $2 $3 $4 $5 $6 $7 $8" > $PROGRESS
+	echo " 100|Error in number args $1 $2 $3 $4 $5 $6 $7 $8 " > /debugging.txt
 	exit -1
 fi
 
