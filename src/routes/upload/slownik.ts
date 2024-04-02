@@ -15,29 +15,31 @@ export const slownik = (app: Express) =>
         filename: string | undefined
         languageModel: LanguageModel | undefined
         outputFormat: OutputFormat | undefined
-        korpus: string | undefined
-        phonmap: string | undefined
-        exceptions: string | undefined
+        korpusname: string | undefined
+        phonmapname: string | undefined
+        exceptionsname: string | undefined
       }
 
       if (
         token === undefined ||
         filename === undefined ||
         languageModel === undefined ||
-        outputFormat === undefined
+        outputFormat === undefined ||
+        korpusname === undefined ||
+        phonmapname === undefined ||
+        exceptionsname === undefined
       ) {
-        return res.status(400).send('token, filename, languageModel, outputFormat is required')
+        return res.status(400).send('token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname is required')
       }
       const sanitizedFilename = sanitize(filename)
 
       res.status(200).send('File uploaded successfully')
 
-      console.log(`script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmap}
-         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`)
+      console.log(`script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`)
       
       exec(
-        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmap}
-         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(
+        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname}
+         uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
          outputFormat
         )} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
