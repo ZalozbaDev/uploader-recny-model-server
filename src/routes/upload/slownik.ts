@@ -15,6 +15,9 @@ export const slownik = (app: Express) =>
         filename: string | undefined
         languageModel: LanguageModel | undefined
         outputFormat: OutputFormat | undefined
+        korpus: string | undefined
+        phonmap: string | undefined
+        exceptions: string | undefined
       }
 
       if (
@@ -31,9 +34,8 @@ export const slownik = (app: Express) =>
 
       // TODO: Add correct script
       exec(
-        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
-          outputFormat
-        )} uploads/${token}/progress.txt`,
+        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmap}
+         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
           if (error !== null) {
             console.log(`exec error: ${error}`)
