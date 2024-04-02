@@ -10,7 +10,7 @@ export const slownik = (app: Express) =>
     '/upload',
     upload.fields([{ name: 'korpus' }, { name: 'exceptions' }, { name: 'phonmap' }]),
     async (req: Request, res: Response) => {
-      const { token, filename, languageModel, outputFormat } = req.body as {
+      const { token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname } = req.body as {
         token: string | undefined
         filename: string | undefined
         languageModel: LanguageModel | undefined
