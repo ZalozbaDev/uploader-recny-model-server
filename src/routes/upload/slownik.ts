@@ -32,10 +32,14 @@ export const slownik = (app: Express) =>
 
       res.status(200).send('File uploaded successfully')
 
-      // TODO: Add correct script
+      console.log(`script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmap}
+         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`)
+      
       exec(
         `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmap}
-         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`,
+         uploads/${token}/exceptions/${exceptions} uploads/${token}/korpus/${korpus} ${parseOutputFormat(
+         outputFormat
+        )} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
           if (error !== null) {
             console.log(`exec error: ${error}`)
