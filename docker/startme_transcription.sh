@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd uploader-recny-model-server && npm start:transcript
+cd uploader-recny-model-server && npm run start:transcript

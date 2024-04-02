@@ -31,7 +31,7 @@ export const slownik = (app: Express) =>
 
       // TODO: Add correct script
       exec(
-        `src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
+        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
           outputFormat
         )} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
