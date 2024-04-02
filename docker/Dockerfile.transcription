@@ -44,13 +44,15 @@ RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install torchaudio==2
 
 RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
 
+RUN touch XXX
+
 RUN git clone https://github.com/ZalozbaDev/uploader-recny-model-server
 
 RUN cd uploader-recny-model-server && git checkout main
 
 RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
 
-COPY docker/startme.sh /
+COPY docker/startme_transcription.sh /
 
 RUN mkdir -p /proprietary
 
@@ -58,4 +60,4 @@ RUN mkdir -p /whisper
 
 RUN mkdir -p /fairseqdata
 
-CMD ["/bin/bash", "-c", "/startme.sh"] 
+CMD ["/bin/bash", "-c", "/startme_transcription.sh"] 

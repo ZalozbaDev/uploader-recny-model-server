@@ -1,9 +1,10 @@
 # Spóznawanje rěče - serwer
 
-## Container twarić
+## Container(y) twarić
 
 ```code
-docker build -f docker/Dockerfile -t offline_transcription_back .
+docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
+docker build -f docker/Dockerfile.phonetics     -t phonetics_back .
 ```
 
 ## Přidatne dataje wobstarać

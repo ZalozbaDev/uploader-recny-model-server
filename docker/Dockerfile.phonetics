@@ -1,0 +1,23 @@
+FROM node:20.11.1-bookworm
+MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+
+# docker build -f docker/Dockerfile -t phonetics_back .
+# docker build -f docker/Dockerfile -t phonetics_back . --no-cache
+
+RUN apt update
+
+RUN apt install -y python3-numpy
+
+RUN cd uploader-recny-model-server && git checkout main
+
+RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+
+COPY docker/startme_phonetics.sh /
+
+RUN mkdir -p /proprietary
+
+RUN mkdir -p /whisper
+
+RUN mkdir -p /fairseqdata
+
+CMD ["/bin/bash", "-c", "/startme_phonetics.sh"] 
