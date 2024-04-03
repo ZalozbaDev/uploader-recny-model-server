@@ -8,7 +8,7 @@ export const addDownloadRoute = (app: Express) =>
     const { token, filename, outputFormat } = req.query as {
       token: string | undefined
       filename: string | undefined
-      outputFormat: OutputFormat | undefined
+      outputFormat: string | undefined
     }
 
     if (token === undefined || filename === undefined || outputFormat === undefined) {
@@ -23,7 +23,7 @@ export const addDownloadRoute = (app: Express) =>
       return res.download(file)
     } else if (isLexFormat(outputFormat)) {
       const file = `uploads/${token}/${removeExtension(sanitizedFilename)}.${parseLexFormat(
-        lexFormat
+        outputFormat
       )}`
 
       return res.download(file)
