@@ -2,20 +2,20 @@
 
 if [ "$#" -ne 8 ]; then
 	echo "need to run this script with the following arguments:"
-	echo "./create_dictionary.sh FOLDER DUMMYSOURCEFILENAME DUMMYLANGUAGEMODEL PHONMAP EXCEPTIONS CORPUS OUTPUTFORMAT PROGRESSFILE"
+	echo "./create_dictionary.sh FOLDER DUMMYSOURCEFILENAME OUTPUTFORMAT PHONMAP EXCEPTIONS CORPUS DUMMYLANGUAGEMODEL PROGRESSFILE"
 	echo "Example:"
-	echo "./create_dictionary.sh 672536cdbea8737853 dummycorpus dummy phonmap.txt exceptions.txt corpus.vocab SAMPA progress.txt"
+	echo "./create_dictionary.sh 672536cdbea8737853 dummycorpus SAMPA phonmap.txt exceptions.txt corpus.vocab dummy progress.txt"
 	echo " 100|Error in number args $1 $2 $3 $4 $5 $6 $7 $8 " > /debugging.txt
 	exit -1
 fi
 
 FOLDERNAME=$1
 SOURCEFILE=$2
-MODEL=$3
+OUTFORMAT=$3
 PHONMAP=$4
 EXCEPTIONS=$5
 CORPUS=$6
-OUTFORMAT=$7
+MODEL=$7
 PROGRESS=$8
 
 
