@@ -21,6 +21,12 @@ export const addDownloadRoute = (app: Express) =>
       )}`
 
       return res.download(file)
+    } else if (isLexFormat(outputFormat)) {
+      const file = `uploads/${token}/${removeExtension(sanitizedFilename)}.${parseLexFormat(
+        lexFormat
+      )}`
+
+      return res.download(file)
     } else {
       return res.status(400).send('Invalid filepath')
     }
