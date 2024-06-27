@@ -1,9 +1,10 @@
 # Spóznawanje rěče - serwer
 
-## Container twarić
+## Container(y) twarić
 
 ```code
-docker build -f docker/Dockerfile -t offline_transcription_back .
+docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
+docker build -f docker/Dockerfile.phonetics     -t phonetics_back .
 ```
 
 ## Přidatne dataje wobstarać
@@ -18,7 +19,7 @@ mkdir -p proprietary whisper fairseqdata
 
 Spóznawanski system wot Fraunhofer bohužel njeje zjawne přistupne.
 
-### whisper
+### whisper (powšitkowny)
 
 #### model wobstarać a přihotować
 
@@ -56,6 +57,33 @@ cp tmp/whisper.cpp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
 cd fairseqdata
 
 wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
+```
+
+## whisper (europeada 2022)
+
+```code
+mkdir -p tmp && cd tmp
+
+git clone git@github.com:ggerganov/whisper.cpp.git
+
+git clone https://huggingface.co/danielzoba/whisper_small_adapted_2024_06_03
+
+git clone https://github.com/openai/whisper
+
+cd whisper.cpp/
+
+git checkout v1.5.4
+
+mkdir -p output/hsb/whisper_small_europeada
+
+mkdir -p ggml_out
+
+cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/checkpoint-2200/* ggml_out/
+cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/vocab.json        ggml_out/
+cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/added_tokens.json ggml_out/
+
+python3 ./models/convert-h5-to-ggml.py ggml_out/ ../whisper output/hsb/whisper_small_europeada/
+
 ```
 
 ## Container wuwjesć
