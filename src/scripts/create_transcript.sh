@@ -51,6 +51,28 @@ case $MODEL in
 		fi
 		;;
 	
+	EURO)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		if [ "$OUTFORMAT" = "srt" ]; then
+			/whisper.cpp/main -m /whisper/hsb/whisper_small_europeada/ggml-model.bin --output-srt -f $SOURCEFILE.wav.resample.wav
+			mv $SOURCEFILE.wav.resample.wav.srt $SOURCEFILE.srt
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			/whisper.cpp/main -m /whisper/hsb/whisper_small_europeada/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
+			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.text
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
+		;;
+	
 	FB)
 		if [ "$OUTFORMAT" = "text" ]; then
 			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
