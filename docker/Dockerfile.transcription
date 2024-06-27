@@ -44,11 +44,10 @@ RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install torchaudio==2
 
 RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
 
-RUN touch XXX
+RUN mkdir -p /uploader-recny-model-server/src
 
-RUN git clone https://github.com/ZalozbaDev/uploader-recny-model-server
-
-RUN cd uploader-recny-model-server && git checkout main
+COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
+COPY src                                          /uploader-recny-model-server/src
 
 RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
 
