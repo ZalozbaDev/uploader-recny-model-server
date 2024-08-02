@@ -78,9 +78,9 @@ mkdir -p output/hsb/whisper_small_europeada
 
 mkdir -p ggml_out
 
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/checkpoint-2200/* ggml_out/
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/vocab.json        ggml_out/
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/added_tokens.json ggml_out/
+cp ../whisper_small_adapted_2024_06_03/0015_even_more_2024_recordings_0001/checkpoint-3800/* ggml_out/
+cp ../whisper_small_adapted_2024_06_03/0015_even_more_2024_recordings_0001/vocab.json        ggml_out/
+cp ../whisper_small_adapted_2024_06_03/0015_even_more_2024_recordings_0001/added_tokens.json ggml_out/
 
 python3 ./models/convert-h5-to-ggml.py ggml_out/ ../whisper output/hsb/whisper_small_europeada/
 
