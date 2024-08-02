@@ -51,7 +51,7 @@ mkdir -p whisper/hsb/whisper_small/
 cp tmp/whisper.cpp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
 ```
 
-## fairseqdata
+### fairseqdata
 
 ```code
 cd fairseqdata
@@ -59,7 +59,7 @@ cd fairseqdata
 wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
 ```
 
-## whisper (europeada 2022)
+### whisper (europeada 2022)
 
 ```code
 mkdir -p tmp && cd tmp
@@ -84,6 +84,28 @@ cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/
 
 python3 ./models/convert-h5-to-ggml.py ggml_out/ ../whisper output/hsb/whisper_small_europeada/
 
+```
+
+### whisper (wulki)
+
+#### model wobstarać a přihotować
+
+```code
+mkdir -p tmp && cd tmp
+
+git clone git@github.com:ggerganov/whisper.cpp.git
+
+git clone https://huggingface.co/Korla/whisper-large-hsb
+
+git clone https://github.com/openai/whisper
+
+cd whisper.cpp/
+
+mkdir -p output/hsb/whisper_large/
+
+python3 ./models/convert-h5-to-ggml.py ../whisper-large-hsb/ ../whisper output/hsb/whisper_large/
+
+cd ../../
 ```
 
 ## Container wuwjesć
