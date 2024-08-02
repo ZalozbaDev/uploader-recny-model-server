@@ -108,7 +108,7 @@ case $MODEL in
 			mv $PROGRESS.tmp $PROGRESS
 			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
@@ -124,7 +124,7 @@ case $MODEL in
 			mv $PROGRESS.tmp $PROGRESS
 			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/merged_47_adp.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
