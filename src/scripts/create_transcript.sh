@@ -55,7 +55,9 @@ case $MODEL in
 		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
 		DURATION=$(soxi -D $SOURCEFILE.wav)
-		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		DURATION=${DURATION%.*}  # strip the decimal part
+		DURATION=$(( "$DURATION" * "3" ))
+		echo $DURATION > $PROGRESS.tmp 
 		cat $PROGRESS >> $PROGRESS.tmp
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
