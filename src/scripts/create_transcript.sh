@@ -158,6 +158,42 @@ case $MODEL in
 		fi
 		;;
 		
+	GMEJ)
+		if [ "$OUTFORMAT" = "srt" ]; then
+			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+			DURATION=$(soxi -D $SOURCEFILE.wav)
+			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+			cat $PROGRESS >> $PROGRESS.tmp
+			mv $PROGRESS.tmp $PROGRESS
+			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+			echo "20|Resampling hotowe" >> $PROGRESS
+			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			echo "80|Spóznawanje hotowe" >> $PROGRESS
+			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
+			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+			echo "----> HOTOWE <----"
+		else
+			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+			DURATION=$(soxi -D $SOURCEFILE.wav)
+			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+			cat $PROGRESS >> $PROGRESS.tmp
+			mv $PROGRESS.tmp $PROGRESS
+			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+			echo "20|Resampling hotowe" >> $PROGRESS
+			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			echo "80|Spóznawanje hotowe" >> $PROGRESS
+			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
+			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+			echo "----> HOTOWE <----"
+		fi
+		;;
+		
 	DEVEL)
 		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 		sleep 1
