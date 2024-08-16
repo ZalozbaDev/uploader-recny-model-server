@@ -123,33 +123,23 @@ case $MODEL in
 		;;
 	
 	BOZA_MSA)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
-			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -D $SOURCEFILE.wav)
-			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-			cat $PROGRESS >> $PROGRESS.tmp
-			mv $PROGRESS.tmp $PROGRESS
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
-			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
 			echo "----> HOTOWE <----"
 		else
-			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -D $SOURCEFILE.wav)
-			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-			cat $PROGRESS >> $PROGRESS.tmp
-			mv $PROGRESS.tmp $PROGRESS
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
-			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
@@ -159,33 +149,23 @@ case $MODEL in
 		;;
 		
 	GMEJ)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
-			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -D $SOURCEFILE.wav)
-			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-			cat $PROGRESS >> $PROGRESS.tmp
-			mv $PROGRESS.tmp $PROGRESS
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
-			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
 			echo "----> HOTOWE <----"
 		else
-			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -D $SOURCEFILE.wav)
-			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-			cat $PROGRESS >> $PROGRESS.tmp
-			mv $PROGRESS.tmp $PROGRESS
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
-			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
@@ -215,6 +195,95 @@ case $MODEL in
 		# echo "-1"  >> $PROGRESS
 		echo "----> HOTOWE <----"
 		;;
+
+	HF_PAU)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		/whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		if [ "$OUTFORMAT" = "srt" ]; then
+			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
+		;;
+	
+	HFBIG_PAU)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		/whisper_main /whisper/hsb/whisper_large/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		if [ "$OUTFORMAT" = "srt" ]; then
+			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
+		;;
+	
+	
+	BOZA_MSA_PAU)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		echo "80|Spóznawanje hotowe" >> $PROGRESS
+		if [ "$OUTFORMAT" = "srt" ]; then
+			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
+		;;
+		
+	GMEJ_PAU)
+		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+		DURATION=$(soxi -D $SOURCEFILE.wav)
+		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		cat $PROGRESS >> $PROGRESS.tmp
+		mv $PROGRESS.tmp $PROGRESS
+		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+		echo "20|Resampling hotowe" >> $PROGRESS
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		echo "80|Spóznawanje hotowe" >> $PROGRESS
+		if [ "$OUTFORMAT" = "srt" ]; then
+			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+			echo "100|Podtitle hotowe" >> $PROGRESS
+		else
+			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.${OUTFORMAT}
+			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+			echo "100|Tekst hotowe" >> $PROGRESS
+		fi
+		;;
+		
+		
 		
 	*)
 		echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS

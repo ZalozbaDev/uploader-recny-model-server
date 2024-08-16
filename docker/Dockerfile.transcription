@@ -54,6 +54,28 @@ COPY src                                          /uploader-recny-model-server/s
 
 RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
 
+# build executables in this container rather than supplying them externally
+
+RUN apt install -y libhunspell-dev libicu-dev libsndfile1-dev
+
+RUN git clone https://github.com/ZalozbaDev/docker_vosk.git
+RUN cd docker_vosk && git checkout 4a934dc383b1110ceb5d85026edd5f4161ec2e6a
+
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git webrtc-audio-processing && \
+cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260 && apt install -y meson libabsl-dev && \
+meson . build -Dprefix=$PWD/install && ninja -C build
+
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/whisper.cpp.git whisper.cpp && \
+cd whisper.cpp && git checkout v1.6.2 && make main
+
+RUN cd docker_vosk/common/cmdline/ && ./build_recikts.sh
+RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
+
+RUN cp docker_vosk/common/cmdline/recikts_out/recikts_main /
+RUN cp docker_vosk/common/cmdline/whisper_out/whisper_main /
+
+#####################
+
 COPY docker/startme_transcription.sh /
 
 RUN mkdir -p /proprietary

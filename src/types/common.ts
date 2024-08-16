@@ -1,4 +1,4 @@
-const languageModel = ['FHG', 'HF', 'GMEJ', 'EURO', 'HFBIG', 'FB', 'BOZA_MSA', 'DEVEL']
+const languageModel = ['FHG', 'HF', 'GMEJ', 'EURO', 'HFBIG', 'FB', 'BOZA_MSA', 'DEVEL', 'HF_PAU', 'HFBIG_PAU', 'BOZA_MSA_PAU', 'GMEJ_PAU']
 export type LanguageModel = (typeof languageModel)[number]
 export const isLanguageModel = (x: any): x is LanguageModel => languageModel.includes(x)
 
