@@ -205,7 +205,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		/whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		/whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
@@ -226,7 +226,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		/whisper_main /whisper/hsb/whisper_large/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		/whisper_main /whisper/hsb/whisper_large/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
@@ -248,7 +248,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
@@ -270,7 +270,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME}
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
