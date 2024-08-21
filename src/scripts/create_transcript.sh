@@ -23,6 +23,13 @@ echo "Format=$OUTFORMAT"
 
 touch $PROGRESS
 
+# list all currently used models here
+
+RECIKTS_MODEL_BOZA_MSA=misa_2024_08_02.cfg
+RECIKTS_MODEL_GMEJNSKE=gmejnske_2024_08_21.cfg
+
+# TBD whisper models
+
 case $MODEL in
 
 	FHG)
@@ -131,7 +138,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
@@ -157,7 +164,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+		LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/$RECIKTS_MODEL_GMEJNSKE $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
@@ -221,7 +228,9 @@ case $MODEL in
 		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
 		DURATION=$(soxi -D $SOURCEFILE.wav)
-		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+		DURATION=${DURATION%.*}  # strip the decimal part
+		DURATION=$(( "$DURATION" * "3" ))
+		echo $DURATION > $PROGRESS.tmp 
 		cat $PROGRESS >> $PROGRESS.tmp
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
@@ -248,7 +257,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/misa_2024_08_02.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
@@ -270,7 +279,7 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/gmejnske_2024_08_09.cfg $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
+		LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/$RECIKTS_MODEL_GMEJNSKE $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
