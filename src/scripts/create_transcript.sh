@@ -302,7 +302,10 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
-		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir uploads/${FOLDERNAME}/ --device cpu --language de $SOURCEFILE.wav.resample.wav > uploads/${FOLDERNAME}/log.log 2>&1
+		pushd /ctranslate2
+		source bin/activate
+		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+		popd
 		if [ "$OUTFORMAT" = "srt" ]; then
 			mv uploads/${FOLDERNAME}/*.srt $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
