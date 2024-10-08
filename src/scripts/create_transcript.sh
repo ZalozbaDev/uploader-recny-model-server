@@ -307,10 +307,10 @@ case $MODEL in
 		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
 		popd
 		if [ "$OUTFORMAT" = "srt" ]; then
-			mv uploads/${FOLDERNAME}/*.srt $(echo "${SOURCEFILE%.*}".srt)
+			mv ${SOURCEFILE%.*}*.srt $(echo "${SOURCEFILE%.*}".srt)
 			echo "100|Podtitle hotowe" >> $PROGRESS
 		else
-			mv uploads/${FOLDERNAME}/*.txt $(echo "${SOURCEFILE%.*}".text)
+			mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".text)
 			echo "100|Tekst hotowe" >> $PROGRESS
 		fi
 		;;
