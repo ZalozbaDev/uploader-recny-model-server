@@ -21,3 +21,37 @@ Should work without GPU
 
 Transcript takes twice the time of the audio (1st pass: speaker classification, 2nd pass: speech recognition)
 
+# Summarize transcript
+
+## llama
+
+fetch llama model(s) in packed format:
+
+https://github.com/akx/ollama-dl 
+
+    set up a Python virtualenv
+    
+    pip install -e .
+    
+    python3 ollama_dl.py llama3.2:1b (or any other model)
+    
+download & build llama.cpp:
+
+https://github.com/ggerganov/llama.cpp
+
+    [options for acceleration] make (-j)
+    
+    
+```code
+
+./llama-cli -m ../ollama-dl/library-llama3.1/model-8eeb52dfb3bb.gguf --file transcript_with_prompt_at_end.txt
+
+```
+
+Prompt at file end:
+
+```code
+
+Erstelle mir eine protokollarische Zusammenfassung dieser Unterhaltung. Benutze die Worte in eckigen Klammern zur Benennung der jeweiligen Sprecher.
+
+```
