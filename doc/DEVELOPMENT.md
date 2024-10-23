@@ -41,6 +41,8 @@ https://github.com/ggerganov/llama.cpp
 
     [options for acceleration] make (-j)
     
+    example: GGML_CUDA=1 CUDA_DOCKER_ARCH=sm_61 make -j
+    
     
 ```code
 
