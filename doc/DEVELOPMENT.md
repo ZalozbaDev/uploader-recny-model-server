@@ -43,7 +43,7 @@ alternative: check this link how to generate gguf files https://github.com/ggerg
 
 ```code
 from huggingface_hub import snapshot_download
-model_id="lmsys/vicuna-13b-v1.5"
+model_id="togethercomputer/LLaMA-2-7B-32K"
 snapshot_download(repo_id=model_id, local_dir="vicuna-hf",
                   local_dir_use_symlinks=False, revision="main")
 ```    
