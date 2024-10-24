@@ -34,6 +34,32 @@ https://github.com/akx/ollama-dl
     pip install -e .
     
     python3 ollama_dl.py llama3.1:8b (or any other model)
+
+alternative: check this link how to generate gguf files https://github.com/ggerganov/llama.cpp/discussions/2948
+
+    pip install huggingface_hub
+    
+    write script "download.py":
+
+```code
+from huggingface_hub import snapshot_download
+model_id="lmsys/vicuna-13b-v1.5"
+snapshot_download(repo_id=model_id, local_dir="vicuna-hf",
+                  local_dir_use_symlinks=False, revision="main")
+```    
+  
+    python3 download.py
+    
+    install llama.cpp python deps: 
+    
+    pip install -r llama.cpp/requirements.txt
+    
+    run conversion script:
+    
+    python convert_hf_to_gguf.py ../tmp10/togethercomputer_LLaMA-2-7B-32K/ --outfile togethercomputer_LLaMA-2-7B-32K.gguf --outtype q8_0 
+    
+    (check help for other quantizations)
+    
     
 download & build llama.cpp:
 
@@ -57,3 +83,8 @@ Prompt at file end:
 Erstelle mir eine protokollarische Zusammenfassung dieser Unterhaltung. Benutze die Worte in eckigen Klammern zur Benennung der jeweiligen Sprecher.
 
 ```
+
+## reasonable models
+
+ollama: library-llama3.1-8b
+
