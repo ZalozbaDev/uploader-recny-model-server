@@ -33,7 +33,7 @@ https://github.com/akx/ollama-dl
     
     pip install -e .
     
-    python3 ollama_dl.py llama3.2:1b (or any other model)
+    python3 ollama_dl.py llama3.1:8b (or any other model)
     
 download & build llama.cpp:
 
