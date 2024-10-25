@@ -84,7 +84,7 @@ Erstelle mir eine protokollarische Zusammenfassung dieser Unterhaltung. Benutze 
 
 ```
 
-Prompt enclosing transcript:
+Prompt enclosing transcript (1):
 
 ```code
 
@@ -96,7 +96,24 @@ Achte darauf, die wichtigsten Themen, Entscheidungen und Fragen zu erfassen. Ben
 
 ```
 
+Prompt enclosing transcript (2):
+
+```code
+
+Erstelle ein detailliertes Protokoll basierend auf dem folgenden Transkript der Unterhaltung:
+"
+TRANSCRIPT
+"
+Die Worte in eckigen Klammern kennzeichnen den jeweiligen Sprecher. Fasse die Wortmeldung jedes einzelnen Sprechers zusammen und kennzeichne dabei, von welchem Sprecher sie stammt.
+
+```
+
+
 ## reasonable models
 
-ollama: library-llama3.1-8b
+ollama: 
+    library-llama3.1-8b
+    library-mistral-7b-instruct
+    
+    
 
