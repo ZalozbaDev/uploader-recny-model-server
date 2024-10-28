@@ -24,6 +24,14 @@ while (<INHANDLE>)
 	
 	($newspeaker) = $tmp =~ m/\[(.*)\].*/;
 	($content) = $tmp =~ m/\[.*\]\:*(.*)/;
+	
+	if (length($newspeaker) < 1)
+	{
+		printf "line w/o apeaker found!\n";
+		$newspeaker = "unbekannt";
+		$content = $tmp;
+	}
+	
 	if ($newspeaker eq $currspeaker)
 	{
 		$oneline = $oneline . $content;
