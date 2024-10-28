@@ -36,6 +36,7 @@ while (<INHANDLE>)
 # 	system("cat tmpprompt.txt");
 
 	system("echo Varianten für Zeile $line_counter: >> $outfile");
+	system("echo $tmp >> $outfile");
 	system("echo ========================= >> $outfile");
 	system("echo >> $outfile");
 
