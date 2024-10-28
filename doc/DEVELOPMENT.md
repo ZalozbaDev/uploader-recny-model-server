@@ -21,6 +21,16 @@ Should work without GPU
 
 Transcript takes twice the time of the audio (1st pass: speaker classification, 2nd pass: speech recognition)
 
+- identify speakers and replace with their names
+
+merge lines with same speakers into one line:
+
+perl merge_speakers.pl transcript_with_speaker_names.txt transkript_merged_speaker_names_noprompt.txt
+
+generate protocol from every line
+
+perl summarize_per_line.pl transkript_merged_speaker_names_noprompt.txt protocol_per_line_variants.txt
+
 # Summarize transcript
 
 ## llama
