@@ -44,7 +44,7 @@ while (<INHANDLE>)
 	{
 		system("echo Variante $i: >> $outfile");
 		system("echo ----------- >> $outfile");
-		system("./llama-cli --no-display-prompt -m ../ollama-dl/library-mistral-7b-instruct/model-ff82381e2bea.gguf --file tmpprompt.txt >> $outfile");
+		system("./llama-cli --no-display-prompt --n-predict -2 -m ../ollama-dl/library-mistral-7b-instruct/model-ff82381e2bea.gguf --file tmpprompt.txt >> $outfile");
 		system("echo >> $outfile");
 	}
 	
