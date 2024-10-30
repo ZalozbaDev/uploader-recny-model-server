@@ -16,6 +16,8 @@ system("rm -f $outfile");
 
 my $line_counter = 0;
 
+# my $accumulated_context = "";
+
 while (<INHANDLE>)
 {
 	$tmp = $_;
@@ -23,28 +25,39 @@ while (<INHANDLE>)
 
 	$line_counter++;
 	
+	$words_in_line = `echo $tmp | wc -w`;
+	# printf("Words detected: %d.\n", $words_in_line);
+	
+	$num_output_tokens = $words_in_line * 4;
+	if ($num_output_tokens < 100)
+	{
+		$num_output_tokens = 100;
+	}
+	printf("Words detected in context=%d, thus limiting output to %d tokens.\n", $words_in_line, $num_output_tokens);
+	
 	open(TMPHANDLE, "> tmpprompt.txt") or die "Cannot write prompt file!\n";
 	
-	printf TMPHANDLE "Erstelle ein detailliertes Protokoll basierend auf dem folgenden Transkript:\n";
+	printf TMPHANDLE "Erstelle ein Protokoll basierend auf dem folgenden Transkript:\n";
 	printf TMPHANDLE "\"\n";
 	printf TMPHANDLE $tmp . "\n";
 	printf TMPHANDLE "\"\n";
-	printf TMPHANDLE "Die Worte in eckigen Klammern benennen den Sprecher. Fasse die Wortmeldung in indirekter Rede mit Nennung des Sprechers zusammen.\n";
+	printf TMPHANDLE "Die Worte in eckigen Klammern benennen den jeweiligen Sprecher. Fasse die Wortmeldung in indirekter Rede mit Nennung jedes Sprechers zusammen. Achte dabei besonders auf Zahlen und Fakten, fasse Dich ansonsten kurz.\n";
 	
 	close TMPHANDLE;
 	
 # 	system("cat tmpprompt.txt");
 
 	system("echo Varianten für Zeile $line_counter: >> $outfile");
+	system("echo ========================= >> $outfile");
 	system("echo $tmp >> $outfile");
 	system("echo ========================= >> $outfile");
 	system("echo >> $outfile");
 
 	for ($i = 1; $i < 3; $i++)
 	{
-		system("echo Variante $i: >> $outfile");
+		system("echo Variante $i max $num_output_tokens token: >> $outfile");
 		system("echo ----------- >> $outfile");
-		system("./llama-cli --no-display-prompt --n-predict -2 -m ../ollama-dl/library-mistral-7b-instruct/model-ff82381e2bea.gguf --file tmpprompt.txt >> $outfile");
+		system("./llama-cli --no-display-prompt --n-predict $num_output_tokens -m ../ollama-dl/library-mistral-7b-instruct/model-ff82381e2bea.gguf --file tmpprompt.txt >> $outfile");
 		system("echo >> $outfile");
 	}
 	
