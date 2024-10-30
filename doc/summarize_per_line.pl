@@ -71,6 +71,12 @@ my $line_counter = 0;
 
 my $accumulated_context = "";
 
+## tuning parameters
+#
+# max tokens (words * 4)?
+# number words for individual processing of line (e.g. 50)
+# number words for accumulated line to be processed (e.g. 100) 
+
 while (<INHANDLE>)
 {
 	$tmp = $_;
