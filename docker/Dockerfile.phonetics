@@ -1,0 +1,25 @@
+FROM node:20.11.1-bookworm
+MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+
+# docker build -f docker/Dockerfile -t phonetics_back .
+# docker build -f docker/Dockerfile -t phonetics_back . --no-cache
+
+RUN git clone https://github.com/ZalozbaDev/speech_recognition_corpus_creation.git
+
+RUN cd speech_recognition_corpus_creation && git checkout 68596c9384adfd073aefc84ee5c0f4393b04b1b5
+
+RUN apt update
+
+RUN apt install -y python3-numpy python3-yaml
+
+RUN touch EWQ
+
+RUN git clone https://github.com/ZalozbaDev/uploader-recny-model-server
+
+RUN cd uploader-recny-model-server && git checkout main
+
+RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+
+COPY docker/startme_phonetics.sh /
+
+CMD ["/bin/bash", "-c", "/startme_phonetics.sh"] 

@@ -15,20 +15,38 @@ export const slownik = (app: Express) =>
           .status(400)
           .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
 
-      const { token, filename, languageModel, outputFormat } = req.body as {
+      const {
+        token,
+        filename,
+        languageModel,
+        outputFormat,
+        korpusname,
+        phonmapname,
+        exceptionsname
+      } = req.body as {
         token: string | undefined
         filename: string | undefined
         languageModel: LanguageModel | undefined
         outputFormat: OutputFormat | undefined
+        korpusname: string | undefined
+        phonmapname: string | undefined
+        exceptionsname: string | undefined
       }
 
       if (
         token === undefined ||
         filename === undefined ||
         languageModel === undefined ||
-        outputFormat === undefined
+        outputFormat === undefined ||
+        korpusname === undefined ||
+        phonmapname === undefined ||
+        exceptionsname === undefined
       ) {
-        return res.status(400).send('token, filename, languageModel, outputFormat is required')
+        return res
+          .status(400)
+          .send(
+            'token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname is required'
+          )
       }
 
       app.locals.currentSlowniktRuns += 1
@@ -36,9 +54,14 @@ export const slownik = (app: Express) =>
 
       res.status(200).send('File uploaded successfully')
 
-      // TODO: Add correct script
+      console.log(
+        `script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
+          outputFormat
+        )} uploads/${token}/progress.txt`
+      )
+
       exec(
-        `src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
+        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
           outputFormat
         )} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
