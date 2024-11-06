@@ -13,6 +13,8 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.locals.currentTranscriptRuns = 0
+app.locals.currentSlowniktRuns = 0
 
 const port =
   (process.env.SERVER_MODE as SERVER_MODE) === 'FONETISIKI_SLOWNIK'
