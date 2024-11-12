@@ -86,7 +86,7 @@ python3 ./models/convert-h5-to-ggml.py ggml_out/ ../whisper output/hsb/whisper_s
 
 ```
 
-### whisper (wulki)
+### whisper (wulki/Korla)
 
 #### model wobstarać a přihotować
 
@@ -104,6 +104,33 @@ cd whisper.cpp/
 mkdir -p output/hsb/whisper_large/
 
 python3 ./models/convert-h5-to-ggml.py ../whisper-large-hsb/ ../whisper output/hsb/whisper_large/
+
+cd ../../
+```
+
+### whisper (wulki/DILHTWD)
+
+#### model wobstarać a přihotować
+
+```code
+mkdir -p tmp && cd tmp
+
+git clone git@github.com:ggerganov/whisper.cpp.git
+
+git clone https://huggingface.co/openai/whisper-large-v3
+
+git clone https://huggingface.co/DILHTWD/whisper-large-v3-hsb
+
+cp whisper-large-v3/vocab.json        whisper-large-v3-hsb
+cp whisper-large-v3/added_tokens.json whisper-large-v3-hsb
+
+git clone https://github.com/openai/whisper
+
+cd whisper.cpp/
+
+mkdir -p output/hsb/whisper_large_dilhtwd/
+
+python3 ./models/convert-h5-to-ggml.py ../whisper-large-v3-hsb/ ../whisper output/hsb/whisper_large_dilhtwd/
 
 cd ../../
 ```
