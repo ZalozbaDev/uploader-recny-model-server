@@ -117,12 +117,12 @@ mkdir -p tmp && cd tmp
 
 git clone git@github.com:ggerganov/whisper.cpp.git
 
-git clone https://huggingface.co/openai/whisper-large-v3
-
 git clone https://huggingface.co/DILHTWD/whisper-large-v3-hsb
 
-cp whisper-large-v3/vocab.json        whisper-large-v3-hsb
-cp whisper-large-v3/added_tokens.json whisper-large-v3-hsb
+# no longer necessary
+#git clone https://huggingface.co/openai/whisper-large-v3
+#cp whisper-large-v3/vocab.json        whisper-large-v3-hsb
+#cp whisper-large-v3/added_tokens.json whisper-large-v3-hsb
 
 git clone https://github.com/openai/whisper
 
