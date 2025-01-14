@@ -10,7 +10,20 @@ export const slownik = (app: Express) =>
     '/upload',
     upload.fields([{ name: 'korpus' }, { name: 'exceptions' }, { name: 'phonmap' }]),
     async (req: Request, res: Response) => {
-      const { token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname } = req.body as {
+      if (app.locals.currentSlowniktRuns > 5)
+        return res
+          .status(400)
+          .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
+
+      const {
+        token,
+        filename,
+        languageModel,
+        outputFormat,
+        korpusname,
+        phonmapname,
+        exceptionsname
+      } = req.body as {
         token: string | undefined
         filename: string | undefined
         languageModel: LanguageModel | undefined
@@ -29,19 +42,30 @@ export const slownik = (app: Express) =>
         phonmapname === undefined ||
         exceptionsname === undefined
       ) {
-        return res.status(400).send('token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname is required')
+        return res
+          .status(400)
+          .send(
+            'token, filename, languageModel, outputFormat, korpusname, phonmapname, exceptionsname is required'
+          )
       }
+
+      app.locals.currentSlowniktRuns += 1
       const sanitizedFilename = sanitize(filename)
 
       res.status(200).send('File uploaded successfully')
 
-      console.log(`script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(outputFormat)} uploads/${token}/progress.txt`)
-      
+      console.log(
+        `script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
+          outputFormat
+        )} uploads/${token}/progress.txt`
+      )
+
       exec(
         `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
-         outputFormat
+          outputFormat
         )} uploads/${token}/progress.txt`,
         (error, stdout, stderr) => {
+          app.locals.currentSlowniktRuns -= 1
           if (error !== null) {
             console.log(`exec error: ${error}`)
             return res.status(400).send('Error')

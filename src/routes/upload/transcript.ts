@@ -7,6 +7,11 @@ import { LanguageModel, OutputFormat } from '../../types/common.ts'
 
 export const transcript = (app: Express) =>
   app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+    if (app.locals.currentTranscriptRuns >= 5)
+      return res
+        .status(400)
+        .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
+
     const { token, filename, languageModel, outputFormat } = req.body as {
       token: string | undefined
       filename: string | undefined
@@ -22,6 +27,7 @@ export const transcript = (app: Express) =>
     ) {
       return res.status(400).send('token, filename, languageModel, outputFormat is required')
     }
+    app.locals.currentTranscriptRuns += 1
     const sanitizedFilename = sanitize(filename)
 
     res.status(200).send('File uploaded successfully')
@@ -31,6 +37,7 @@ export const transcript = (app: Express) =>
         outputFormat
       )} uploads/${token}/progress.txt`,
       (error, stdout, stderr) => {
+        app.locals.currentTranscriptRuns -= 1
         if (error !== null) {
           console.log(`exec error: ${error}`)
           return res.status(400).send('Error')
