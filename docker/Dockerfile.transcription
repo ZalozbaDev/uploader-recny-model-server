@@ -47,12 +47,43 @@ RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install torchaudio==2
 
 RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
 
+## different venv for whisper-ctranslate2
+
+RUN mkdir -p /ctranslate2
+
+RUN cd ctranslate2 && python3.10 -m venv .
+
+RUN cd ctranslate2 && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.4.5'
+
+
 RUN mkdir -p /uploader-recny-model-server/src
 
 COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
 COPY src                                          /uploader-recny-model-server/src
 
 RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+
+# build executables in this container rather than supplying them externally
+
+RUN apt install -y libhunspell-dev libicu-dev libsndfile1-dev
+
+RUN git clone https://github.com/ZalozbaDev/docker_vosk.git
+RUN cd docker_vosk && git checkout 5ff4e0b2061e8a0b0fcd4364d129967f891d41f5
+
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git webrtc-audio-processing && \
+cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260 && apt install -y meson libabsl-dev && \
+meson . build -Dprefix=$PWD/install && ninja -C build
+
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/whisper.cpp.git whisper.cpp && \
+cd whisper.cpp && git checkout v1.6.2 && make main
+
+RUN cd docker_vosk/common/cmdline/ && ./build_recikts.sh
+RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
+
+RUN cp docker_vosk/common/cmdline/recikts_out/recikts_main /
+RUN cp docker_vosk/common/cmdline/whisper_out/whisper_main /
+
+#####################
 
 COPY docker/startme_transcription.sh /
 

@@ -19,71 +19,28 @@ mkdir -p proprietary whisper fairseqdata
 
 Spóznawanski system wot Fraunhofer bohužel njeje zjawne přistupne.
 
-### whisper (powšitkowny)
+### whisper
 
-#### model wobstarać a přihotować
+#### modele wobstarać a přihotować
 
-```code
-mkdir -p tmp && cd tmp
+https://github.com/ZalozbaDev/mudrowak/blob/main/doc/models/README.md
 
-git clone git@github.com:ggerganov/whisper.cpp.git
-
-git checkout v1.5.4
-
-git clone https://huggingface.co/spaces/Korla/hsb_stt_demo
-
-git clone https://github.com/openai/whisper
-
-cd whisper.cpp/
-
-mkdir -p output/hsb/whisper_small
-
-python3 ./models/convert-h5-to-ggml.py  ../hsb_stt_demo/hsb_whisper/ ../whisper/ output/hsb/whisper_small
-
-cd ../../
-```
-
-#### model do rjadowaka kopěrować
+#### modele do rjadowaka kopěrować
 
 ```code
 mkdir -p whisper/hsb/whisper_small/
 
-cp tmp/whisper.cpp/output/hsb/whisper_small/* whisper/hsb/whisper_small/
+cp TBD whisper/hsb/whisper_small/
+...
+TBD
 ```
 
-## fairseqdata
+### fairseqdata
 
 ```code
 cd fairseqdata
 
 wget https://dl.fbaipublicfiles.com/mms/asr/mms1b_all.pt
-```
-
-## whisper (europeada 2022)
-
-```code
-mkdir -p tmp && cd tmp
-
-git clone git@github.com:ggerganov/whisper.cpp.git
-
-git clone https://huggingface.co/danielzoba/whisper_small_adapted_2024_06_03
-
-git clone https://github.com/openai/whisper
-
-cd whisper.cpp/
-
-git checkout v1.5.4
-
-mkdir -p output/hsb/whisper_small_europeada
-
-mkdir -p ggml_out
-
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/checkpoint-2200/* ggml_out/
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/vocab.json        ggml_out/
-cp ../whisper_small_adapted_2024_06_03/0012_whisper-base_unified_named_entities/added_tokens.json ggml_out/
-
-python3 ./models/convert-h5-to-ggml.py ggml_out/ ../whisper output/hsb/whisper_small_europeada/
-
 ```
 
 ## Container wuwjesć
