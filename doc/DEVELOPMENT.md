@@ -55,16 +55,52 @@ export LD_LIBRARY_PATH=${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cublas
 # kinda dirty hack to reference a lib from python 3.10
 export LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib/
 
-
-whisper-ctranslate2 --model_dir ct2-XXX/ --output_dir output --device cuda --language en --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
+# careful, always use "--model_directory" and "--local_files_only" when using your own models!!!
+whisper-ctranslate2 --model_directory ct2-XXX/   --local_files_only true --output_dir output --device cuda --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
 
 # use --device cpu if CUDA is not working properly
 
+# if you know that there are more than 2 speakers, use the argument --speaker_num
+
 ```
 
-TODO: none of the finetuned models seem to work properly with faster-whisper. 
-Need to check how to get our models to work with this 
-software first, then we can hopefully adjust whisper_ctranslate2 accordingly.
+TODO: check if "speaker_num" shall be removed (resp an "auto" option to be added)
+
+TODO: check if it is required to disable the arguments to faster_whisper (check branch)
+
+## verify that your model works with faster_whisper
+
+when whisper_ctranslate2 does not properly detect / transcribe in your language, test faster_whisper directly first
+
+```code
+
+from faster_whisper import WhisperModel
+
+# Run on GPU with FP16
+model = WhisperModel("/home/danielzoba/whisper_ctranslate_venv/ct2-XXX/")
+
+segments, info = model.transcribe("/home/danielzoba/speech_corpus_XXX.wav", beam_size=5)
+
+print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
+
+for segment in segments:
+    print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+
+```
+
+model might not load, but this seems to work after the following adjustment to the ct2 model:
+
+```
+
+in my case tokenizer.json and preprocessor_config.json were missing in model directory after i converted whisper model to ct2
+
+error dissapeared after i converted like this:
+
+ct2-transformers-converter --model openai/whisper-tiny --output_dir whisper-tiny-ct2 --copy_files tokenizer.json preprocessor_config.json
+
+
+```
+
 
 # Summarize transcript
 
