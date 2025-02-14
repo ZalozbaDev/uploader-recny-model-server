@@ -62,6 +62,9 @@ whisper-ctranslate2 --model_dir ct2-XXX/ --output_dir output --device cuda --lan
 
 ```
 
+TODO: none of the finetuned models seem to work properly with faster-whisper. 
+Need to check how to get our models to work with this 
+software first, then we can hopefully adjust whisper_ctranslate2 accordingly.
 
 # Summarize transcript
 
