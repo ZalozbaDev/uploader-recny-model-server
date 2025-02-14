@@ -31,6 +31,34 @@ generate protocol from every line
 
 perl summarize_per_line.pl transkript_merged_speaker_names_noprompt.txt protocol_per_line_variants.txt
 
+# same for custom (finetuned) models
+
+## convert model to Ctranslate2
+
+```code
+
+pip install transformers[torch]
+ct2-transformers-converter --model ../cache/XXX_whisper_large_v3_turbo_hsb/ --output_dir ct2-XXX
+
+```
+
+## run ctranslate2
+
+```code
+
+# workaround for not finding libraries ("Unable to load any of {libcudnn_cnn.so.9.1.0, libcudnn_cnn.so.9.1, libcudnn_cnn.so.9, libcudnn_cnn.so}")
+pip install ctranslate2==4.4.0
+
+# workaround issues with libraries in a python venv (??? check for proper python version)
+export LD_LIBRARY_PATH=${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cublas/lib:${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cudnn/lib
+
+whisper-ctranslate2 --model_dir ct2-XXX/ --output_dir output --device cuda --language en --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
+
+# use --device cpu if CUDA is not working properly
+
+```
+
+
 # Summarize transcript
 
 ## llama
