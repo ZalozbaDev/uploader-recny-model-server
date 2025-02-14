@@ -52,6 +52,10 @@ pip install ctranslate2==4.4.0
 # workaround issues with libraries in a python venv (??? check for proper python version)
 export LD_LIBRARY_PATH=${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cublas/lib:${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cudnn/lib
 
+# kinda dirty hack to reference a lib from python 3.10
+export LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib/
+
+
 whisper-ctranslate2 --model_dir ct2-XXX/ --output_dir output --device cuda --language en --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
 
 # use --device cpu if CUDA is not working properly
