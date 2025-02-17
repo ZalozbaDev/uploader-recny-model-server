@@ -55,8 +55,17 @@ export LD_LIBRARY_PATH=${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cublas
 # kinda dirty hack to reference a lib from python 3.10
 export LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib/
 
+# alternatively, install these packages and copy the library directories to a different location (need to re-install venv afterwards, it will be totally screwed)
+pip install nvidia-cudnn-cu11==8.9.6.50 nvidia-cublas-cu11
+find . -name "*_ops_infer*"
+cp -r ./lib/python3.11/site-packages/nvidia/cudnn/lib oldlibs_cudnn/
+find . -name "libcublas*"
+cp -r ./lib/python3.11/site-packages/nvidia/cublas/lib oldlibs_cublas/
+pip uninstall nvidia-cudnn-cu11 nvidia-cublas-cu11
+export LD_LIBRARY_PATH=$(pwd)/oldlibs_cudnn/:$(pwd)/oldlibs_cublas
+
 # careful, always use "--model_directory" and "--local_files_only" when using your own models!!!
-whisper-ctranslate2 --model_directory ct2-XXX/   --local_files_only true --output_dir output --device cuda --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
+whisper-ctranslate2 --model_directory ct2-XXX/   --local_files_only true --output_dir output --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] filename.mp3|avi|mp4|...  
 
 # use --device cpu if CUDA is not working properly
 
@@ -64,10 +73,11 @@ whisper-ctranslate2 --model_directory ct2-XXX/   --local_files_only true --outpu
 
 ```
 
+* TODO: check if it is required to disable the arguments to faster_whisper (check branch)
+    * no, not necessary, recognition works  
+
 TODO: check if "speaker_num" shall be removed (resp an "auto" option to be added)
-
-TODO: check if it is required to disable the arguments to faster_whisper (check branch)
-
+    
 ## verify that your model works with faster_whisper
 
 when whisper_ctranslate2 does not properly detect / transcribe in your language, test faster_whisper directly first
