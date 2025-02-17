@@ -38,7 +38,7 @@ perl summarize_per_line.pl transkript_merged_speaker_names_noprompt.txt protocol
 ```code
 
 pip install transformers[torch]
-ct2-transformers-converter --model ../cache/XXX_whisper_large_v3_turbo_hsb/ --output_dir ct2-XXX
+ct2-transformers-converter --model ../cache/XXX_whisper_large_v3_turbo_hsb/ --output_dir ct2-XXX [ --copy_files tokenizer.json preprocessor_config.json ]
 
 ```
 
