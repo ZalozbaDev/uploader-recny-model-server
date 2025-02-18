@@ -14,5 +14,14 @@ RUN mkdir whisper_ctranslate && cd whisper_ctranslate && python3 -m venv .
 
 # install all dependencies required to convert whisper models and to run whisper_ctranslate2
 RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.5.2'
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install transformers[torch]'
 
+# bugfix for not finding libraries properly: force lower version of ctranslate2
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install ctranslate2==4.4.0'
 
+# create workaround env to fetch missing old CUDA libraries
+RUN mkdir oldlibs && cd oldlibs && python3 -m venv .
+
+# install older packages to get a hold on the library directories
+RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cudnn-cu11==8.9.6.50'
+RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cublas-cu11==11.11.3.6'
