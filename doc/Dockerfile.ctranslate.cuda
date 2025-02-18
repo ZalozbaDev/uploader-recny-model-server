@@ -1,0 +1,18 @@
+FROM ubuntu:noble
+MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+
+# normal call
+# docker build -f Dockerfile.ctranslate.cuda --progress=plain -t ctranslate_diarization_cuda .
+
+RUN apt update
+
+# install default python
+RUN apt install -y python3-pip python3-venv python3-setuptools python3-distutils-extra
+
+# create execution venv
+RUN mkdir whisper_ctranslate && cd whisper_ctranslate && python3 -m venv .
+
+# install all dependencies required to convert whisper models and to run whisper_ctranslate2
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.5.2'
+
+
