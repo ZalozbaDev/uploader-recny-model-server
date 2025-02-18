@@ -43,6 +43,9 @@ RUN mkdir /output
 # install nvidia-smi cmdline util
 RUN apt install -y nvidia-utils-535-server=535.216.03-0ubuntu0.24.04.1
 
+# bind-mount cache directory if you want to avoid re-downloading diarization models everytime
+RUN mkdir -p /root/.cache/
+
 # comand line examples:
 
 ## convert a whisper model to ct2
@@ -55,5 +58,5 @@ RUN apt install -y nvidia-utils-535-server=535.216.03-0ubuntu0.24.04.1
 
 ## run whisper_ctranslate2 with spekaer diarization
 # docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ \
-# --mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda \
+# --mount type=bind,source=$(pwd)/output,target=/output/ --mount type=bind,source=$(pwd)/cache,target=/root/.cache/ -it ctranslate_diarization_cuda \
 # /bin/bash -c 'cd whisper_ctranslate && source bin/activate && LD_LIBRARY_PATH=/whisper_ctranslate/oldlibs_cudnn:/whisper_ctranslate/oldlibs_cublas whisper-ctranslate2 --model_directory /model/XXX/ --local_files_only true --output_dir /output/YYY/ --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] /input/filename.mp3|avi|mp4|...
