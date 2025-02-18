@@ -25,3 +25,24 @@ RUN mkdir oldlibs && cd oldlibs && python3 -m venv .
 # install older packages to get a hold on the library directories
 RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cudnn-cu11==8.9.6.50'
 RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cublas-cu11==11.11.3.6'
+
+# find the directories of interest in case they have changed
+# RUN find oldlibs/ -name "*_ops_infer*"
+# RUN find oldlibs/ -name "libcublas*"
+
+# copy old libs to execution venv 
+RUN cp -r oldlibs/lib/python3.12/site-packages/nvidia/cudnn/lib   whisper_ctranslate/oldlibs_cudnn
+RUN cp -r oldlibs/lib/python3.12/site-packages/nvidia/cublas/lib/ whisper_ctranslate/oldlibs_cublas
+
+# create placeholder directories for bind mounts
+RUN mkdir /model
+RUN mkdir /input
+RUN mkdir /output
+
+# comand line examples:
+
+## convert a whisper model to ct2
+# docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ --mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda "ct2-transformers-converter --model /model/XXX_whisper_large_v3_turbo_hsb/ --output_dir /output/ --copy_files tokenizer.json preprocessor_config.json"
+
+
+
