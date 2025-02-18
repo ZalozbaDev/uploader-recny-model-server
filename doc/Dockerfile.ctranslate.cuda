@@ -42,7 +42,11 @@ RUN mkdir /output
 # comand line examples:
 
 ## convert a whisper model to ct2
-# docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ --mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda "ct2-transformers-converter --model /model/XXX_whisper_large_v3_turbo_hsb/ --output_dir /output/ --copy_files tokenizer.json preprocessor_config.json"
+# docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ \
+--mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda \
+/bin/bash -c 'cd whisper_ctranslate && source bin/activate && ct2-transformers-converter --model /model/XXX_whisper_large_v3_turbo_hsb/ --output_dir /output/model/ --copy_files tokenizer.json preprocessor_config.json'
+
+
 
 
 
