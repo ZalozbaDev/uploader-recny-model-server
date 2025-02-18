@@ -41,7 +41,7 @@ RUN mkdir /input
 RUN mkdir /output
 
 # install nvidia-smi cmdline util
-RUN apt install -y nvidia-utils-535-server=535.183.06-0ubuntu0.24.04.1
+RUN apt install -y nvidia-utils-535-server=535.216.03-0ubuntu0.24.04.1
 
 # comand line examples:
 
@@ -50,7 +50,10 @@ RUN apt install -y nvidia-utils-535-server=535.183.06-0ubuntu0.24.04.1
 # --mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda \
 # /bin/bash -c 'cd whisper_ctranslate && source bin/activate && ct2-transformers-converter --model /model/XXX_whisper_large_v3_turbo_hsb/ --output_dir /output/model/ --copy_files tokenizer.json preprocessor_config.json'
 
+## test CUDA setup
+# docker run -it ctranslate_diarization_cuda nvidia-smi
+
 ## run whisper_ctranslate2 with spekaer diarization
 # docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ \
 # --mount type=bind,source=$(pwd)/output,target=/output/ -it ctranslate_diarization_cuda \
-# /bin/bash -c 'cd whisper_ctranslate && source bin/activate && whisper-ctranslate2 --model_directory /model/XXX/ --local_files_only true --output_dir /output/YYY/ --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] /input/filename.mp3|avi|mp4|...
+# /bin/bash -c 'cd whisper_ctranslate && source bin/activate && LD_LIBRARY_PATH=/whisper_ctranslate/oldlibs_cudnn:/whisper_ctranslate/oldlibs_cublas whisper-ctranslate2 --model_directory /model/XXX/ --local_files_only true --output_dir /output/YYY/ --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] /input/filename.mp3|avi|mp4|...
