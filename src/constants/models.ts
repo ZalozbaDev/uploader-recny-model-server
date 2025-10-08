@@ -19,7 +19,7 @@ export const models: Model[] = [
     diarization: true,
     vad: true,
     language: 'hsb',
-    source: 'https://...'
+    source: 'https://...',
   },
   {
     name: 'HFDSB',
@@ -29,7 +29,7 @@ export const models: Model[] = [
     diarization: true,
     vad: true,
     language: 'dsb',
-    source: 'https://...'
+    source: 'https://...',
   },
   {
     name: 'BOZA_MSA',
@@ -37,9 +37,9 @@ export const models: Model[] = [
     description: 'wusměrjene na cyrkwinsku rěč - Fraunhofer recIKTS',
     srt: true,
     diarization: false,
-    vad: true
+    vad: true,
     language: 'hsb',
-    source: 'Fraunhofer recIKTS'
+    source: 'Fraunhofer recIKTS',
   },
   {
     name: 'DEVEL',
@@ -47,8 +47,8 @@ export const models: Model[] = [
     description: 'jenož za wuwiwarjow',
     srt: false,
     diarization: false,
-    vad: false
+    vad: false,
     language: 'hsb',
-    source: 'xxx'
+    source: 'xxx',
   }
 ]
