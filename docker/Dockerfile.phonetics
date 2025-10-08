@@ -1,8 +1,8 @@
 FROM node:20.11.1-bookworm
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
-# docker build -f docker/Dockerfile -t phonetics_back .
-# docker build -f docker/Dockerfile -t phonetics_back . --no-cache
+# docker build -f docker/Dockerfile.phonetics -t phonetics_back .
+# docker build -f docker/Dockerfile.phonetics -t phonetics_back . --no-cache
 
 RUN git clone https://github.com/ZalozbaDev/speech_recognition_corpus_creation.git
 

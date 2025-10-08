@@ -1,0 +1,13 @@
+wheel==0.42.0
+cython==3.0.8
+soundfile==0.12.1
+editdistance==0.8.1
+torch==2.2.1
+hydra-core==1.0.7
+numpy==1.26.4
+omegaconf==2.0.6
+regex==2023.12.25
+sacrebleu==2.4.0
+scipy==1.12.0
+scikit-learn==1.4.1post1
+torchaudio==2.2.1

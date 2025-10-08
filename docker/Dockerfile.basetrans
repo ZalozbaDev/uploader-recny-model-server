@@ -1,0 +1,78 @@
+FROM node:20.11.1-bookworm
+MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+
+# docker build -f docker/Dockerfile.basetrans -t offline_transcription_basetrans .
+# docker build -f docker/Dockerfile.basetrans -t offline_transcription_basetrans . --no-cache
+
+RUN apt update
+
+#############################
+# whisper.cpp
+#############################
+
+RUN apt install -y sox ffmpeg python3 python3-numpy cmake
+
+RUN git clone https://github.com/ZalozbaDev/whisper.cpp.git
+
+RUN cd whisper.cpp && git checkout v1.7.4 && cmake -B build && cmake --build build --config Release
+
+#############################
+# docker_vosk 
+#############################
+
+RUN apt install -y libhunspell-dev libicu-dev libsndfile1-dev
+
+RUN git clone https://github.com/ZalozbaDev/docker_vosk.git
+RUN cd docker_vosk && git checkout 608ed79aeeb13829d7a85688dcda1099e82bbb2c
+
+RUN apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev
+
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git webrtc-audio-processing && \
+cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260 && apt install -y meson libabsl-dev && \
+meson . build -Dprefix=$PWD/install && ninja -C build
+
+RUN cd docker_vosk/common/cmdline/ && ln -s /whisper.cpp whisper.cpp
+
+RUN cd docker_vosk/common/cmdline/ && ./build_recikts.sh
+RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
+
+RUN cp docker_vosk/common/cmdline/recikts_out/recikts_main /
+RUN cp docker_vosk/common/cmdline/whisper_out/whisper_main /
+RUN cp docker_vosk/common/cmdline/whisper_out/*.so /
+
+#############################
+# python 3.10
+#############################
+
+RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz
+
+RUN tar xvfz Python-3.10.0.tgz
+
+RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j8 && make altinstall
+
+#############################
+# ctranslate2
+#############################
+
+RUN mkdir -p /ctranslate2
+
+RUN cd ctranslate2 && python3.10 -m venv .
+
+RUN cd ctranslate2 && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.4.5'
+
+#############################
+# fairseq2
+#############################
+
+RUN git clone https://github.com/ZalozbaDev/fairseq
+
+RUN cd fairseq && git checkout e4cebef3bb4e24e08c001d874e88e3bd78295a28
+
+RUN cd fairseq && python3.10 -m venv .
+
+COPY docker/requirements_fairseq.txt fairseq/
+
+RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install -r requirements_fairseq.txt'
+
+RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
+

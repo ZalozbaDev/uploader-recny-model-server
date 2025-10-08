@@ -1,8 +1,8 @@
 FROM node:20.11.1-bookworm
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
-# docker build -f docker/Dockerfile -t offline_transcription_back .
-# docker build -f docker/Dockerfile -t offline_transcription_back . --no-cache
+# docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
+# docker build -f docker/Dockerfile.transcription -t offline_transcription_back . --no-cache
 
 RUN apt update
 
