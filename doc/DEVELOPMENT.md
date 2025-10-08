@@ -38,7 +38,7 @@ perl summarize_per_line.pl transkript_merged_speaker_names_noprompt.txt protocol
 ```code
 
 pip install transformers[torch]
-ct2-transformers-converter --model ../cache/XXX_whisper_large_v3_turbo_hsb/ --output_dir ct2-XXX
+ct2-transformers-converter --model ../cache/XXX_whisper_large_v3_turbo_hsb/ --output_dir ct2-XXX [ --copy_files tokenizer.json preprocessor_config.json ]
 
 ```
 
@@ -52,9 +52,62 @@ pip install ctranslate2==4.4.0
 # workaround issues with libraries in a python venv (??? check for proper python version)
 export LD_LIBRARY_PATH=${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cublas/lib:${PWD}/.venv/lib64/python3.11/site-packages/nvidia/cudnn/lib
 
-whisper-ctranslate2 --model_dir ct2-XXX/ --output_dir output --device cuda --language en --hf_token hf_dskljgheruibvkjt  filename.mp3|avi|mp4|...  
+# kinda dirty hack to reference a lib from python 3.10
+export LD_LIBRARY_PATH=/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib/
+
+# alternatively, install these packages and copy the library directories to a different location (need to re-install venv afterwards, it will be totally screwed)
+pip install nvidia-cudnn-cu11==8.9.6.50 nvidia-cublas-cu11
+find . -name "*_ops_infer*"
+cp -r ./lib/python3.11/site-packages/nvidia/cudnn/lib oldlibs_cudnn/
+find . -name "libcublas*"
+cp -r ./lib/python3.11/site-packages/nvidia/cublas/lib oldlibs_cublas/
+pip uninstall nvidia-cudnn-cu11 nvidia-cublas-cu11
+export LD_LIBRARY_PATH=$(pwd)/oldlibs_cudnn/:$(pwd)/oldlibs_cublas
+
+# careful, always use "--model_directory" and "--local_files_only" when using your own models!!!
+whisper-ctranslate2 --model_directory ct2-XXX/   --local_files_only true --output_dir output --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] filename.mp3|avi|mp4|...  
 
 # use --device cpu if CUDA is not working properly
+
+# if you know that there are more than 2 speakers, use the argument --speaker_num
+
+```
+
+* TODO: check if it is required to disable the arguments to faster_whisper (check branch)
+    * no, not necessary, recognition works  
+
+TODO: check if "speaker_num" shall be removed (resp an "auto" option to be added)
+    
+## verify that your model works with faster_whisper
+
+when whisper_ctranslate2 does not properly detect / transcribe in your language, test faster_whisper directly first
+
+```code
+
+from faster_whisper import WhisperModel
+
+# Run on GPU with FP16
+model = WhisperModel("/home/danielzoba/whisper_ctranslate_venv/ct2-XXX/")
+
+segments, info = model.transcribe("/home/danielzoba/speech_corpus_XXX.wav", beam_size=5)
+
+print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
+
+for segment in segments:
+    print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
+
+```
+
+model might not load, but this seems to work after the following adjustment to the ct2 model:
+
+```
+
+in my case tokenizer.json and preprocessor_config.json were missing in model directory after i converted whisper model to ct2
+
+error dissapeared after i converted like this:
+
+ct2-transformers-converter --model openai/whisper-tiny --output_dir whisper-tiny-ct2 --copy_files tokenizer.json preprocessor_config.json
+
 
 ```
 

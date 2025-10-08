@@ -1,0 +1,63 @@
+FROM ubuntu:noble
+MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+
+# normal call
+# docker build -f Dockerfile.ctranslate.cuda --progress=plain -t ctranslate_diarization_cuda .
+
+RUN apt update
+
+# install default python
+RUN apt install -y python3-pip python3-venv python3-setuptools python3-distutils-extra
+
+# create execution venv
+RUN mkdir whisper_ctranslate && cd whisper_ctranslate && python3 -m venv .
+
+# install all dependencies required to convert whisper models and to run whisper_ctranslate2
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.5.2'
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install transformers[torch]'
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install pyannote.audio'
+
+# bugfix for not finding libraries properly: force lower version of ctranslate2
+RUN cd whisper_ctranslate && /bin/bash -c 'source bin/activate && pip install ctranslate2==4.4.0'
+
+# create workaround env to fetch missing old CUDA libraries
+RUN mkdir oldlibs && cd oldlibs && python3 -m venv .
+
+# install older packages to get a hold on the library directories
+RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cudnn-cu11==8.9.6.50'
+RUN cd oldlibs && /bin/bash -c 'source bin/activate && pip install nvidia-cublas-cu11==11.11.3.6'
+
+# find the directories of interest in case they have changed
+# RUN find oldlibs/ -name "*_ops_infer*"
+# RUN find oldlibs/ -name "libcublas*"
+
+# copy old libs to execution venv 
+RUN cp -r oldlibs/lib/python3.12/site-packages/nvidia/cudnn/lib   whisper_ctranslate/oldlibs_cudnn
+RUN cp -r oldlibs/lib/python3.12/site-packages/nvidia/cublas/lib/ whisper_ctranslate/oldlibs_cublas
+
+# create placeholder directories for bind mounts
+RUN mkdir /model
+RUN mkdir /input
+RUN mkdir /output
+
+# install nvidia-smi cmdline util (pick the version that matches your host driver)
+RUN apt install -y nvidia-utils-535-server=535.216.03-0ubuntu0.24.04.1
+# RUN apt install -y nvidia-utils-550=550.120-0ubuntu0.24.04.1
+
+# bind-mount cache directory if you want to avoid re-downloading diarization models everytime
+RUN mkdir -p /root/.cache/
+
+# comand line examples:
+
+## convert a whisper model to ct2
+# docker run --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ \
+# -it ctranslate_diarization_cuda \
+# /bin/bash -c 'cd whisper_ctranslate && source bin/activate && ct2-transformers-converter --model /input/XXX_whisper_large_v3_turbo_hsb/ --output_dir /model/XXX/ --copy_files tokenizer.json preprocessor_config.json'
+
+## test CUDA setup
+# docker run --privileged -it ctranslate_diarization_cuda nvidia-smi
+
+## run whisper_ctranslate2 with spekaer diarization
+# docker run --privileged --mount type=bind,source=$(pwd)/model,target=/model/ --mount type=bind,source=$(pwd)/input,target=/input/ \
+# --mount type=bind,source=$(pwd)/output,target=/output/ --mount type=bind,source=$(pwd)/cache,target=/root/.cache/ -it ctranslate_diarization_cuda \
+# /bin/bash -c 'cd whisper_ctranslate && source bin/activate && LD_LIBRARY_PATH=/whisper_ctranslate/oldlibs_cudnn:/whisper_ctranslate/oldlibs_cublas whisper-ctranslate2 --model_directory /model/XXX/ --local_files_only true --output_dir /output/YYY/ --device cuda --hf_token hf_dskljgheruibvkjt [--speaker_num 15] /input/filename.mp3|avi|mp4|...
