@@ -32,10 +32,15 @@ export const transcript = (app: Express) =>
 
     res.status(200).send('File uploaded successfully')
 
+    console.log(`will execute: src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
+        outputFormat
+        )} uploads/${token}/progress.txt`)
+    
     exec(
       `src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
         outputFormat
       )} uploads/${token}/progress.txt`,
+      { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
       (error, stdout, stderr) => {
         app.locals.currentTranscriptRuns -= 1
 
