@@ -72,9 +72,11 @@ RUN cd fairseq && python3.10 -m venv .
 
 COPY docker/requirements_fairseq.txt fairseq/
 
-RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install -r requirements_fairseq.txt'
+RUN cd fairseq && /bin/bash -c 'source bin/activate && pip3.10 install -r requirements_fairseq.txt'
 
-RUN cd fairseq && /bin/bash -c 'source bin/activate && which pip && ls -l bin/'
+RUN cd fairseq && /bin/bash -c 'source bin/activate && pip3.10 install pip'
 
-RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
+# disable this to execute command in interactive shell
+# RUN cd fairseq && /bin/bash -c 'source bin/activate && pip3.10 install --editable ./'
+## docker run -it offline_transcription_basetrans /bin/bash
 
