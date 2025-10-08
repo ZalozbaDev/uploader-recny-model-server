@@ -1,18 +1,15 @@
 #!/bin/bash
 
-if [ "$#" -ne 5 ]; then
-	echo "need to run this script with the following arguments:"
-	echo "./create_transcript.sh FOLDER SOURCEFILENAME LANGUAGEMODEL OUTPUTFORMAT PROGRESSFILE"
-	echo "Example:"
-	echo "./create_transcript.sh 672536cdbea8737853 video.mp4 whisper srt progress.txt"
-	exit -1
-fi
+
 
 FOLDERNAME=$1
 SOURCEFILE=$2
 MODEL=$3
-OUTFORMAT=$4
-PROGRESS=$5
+OUTFORMAT=srt
+PROGRESS=$4
+TRANSLATE=$5 
+DIARIZATION=$6 
+VAD=$7
 
 
 echo "Dataja=$SOURCEFILE"
@@ -57,6 +54,16 @@ case $MODEL in
 			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
 			echo "100|Tekst hotowe" >> $PROGRESS
 		fi
+		
+		/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-srt -f $SOURCEFILE.wav.resample.wav
+		mv $SOURCEFILE.wav.resample.wav.srt $SOURCEFILE.srt
+		ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
+		echo "100|Podtitle hotowe" >> $PROGRESS
+		
+		/whisper.cpp/main -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
+		mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.text
+		ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+		echo "100|Tekst hotowe" >> $PROGRESS
 		;;
 	
 	HFBIG)
@@ -191,8 +198,10 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		cp $SOURCEFILE $SOURCEFILE.wav
 		cp $SOURCEFILE.wav $SOURCEFILE.wav.resample.wav
+		cp $SOURCEFILE $SOURCEFILE.wav.resample.wav.rec.log
 		sleep 1
 		echo "20|Resampling hotowe ($DURATION)" >> $PROGRESS
+		cp $SOURCEFILE.wav.resample.wav $SOURCEFILE.wav.resample.wav.rec.log
 		cp $SOURCEFILE.wav.resample.wav $SOURCEFILE.wav.resample.wav.rec.log
 		sleep 5
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
