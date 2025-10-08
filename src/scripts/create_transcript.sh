@@ -165,7 +165,6 @@ case $MODEL in
 		# TBD which filename?
 		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
 		echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
-		fi
 		;;
 		
 	DEVEL)
