@@ -55,7 +55,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
 				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
@@ -106,7 +106,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
 				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
@@ -134,7 +134,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
 				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
