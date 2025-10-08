@@ -22,6 +22,9 @@ export const addStatusRoute = (app: Express) =>
       res.send({
         duration: stdoutLinesCount <= 2 ? -1 : firstLine, // in seconds
         done: lastLine.split('|')[0] === '100',
+        hasTxtDownload: lastLine.split('|')[0] === '100' && lastLine.split('|')[2] === '1',
+        hasSrtDownload: lastLine.split('|')[0] === '100' && lastLine.split('|')[3] === '1',
+        hasAudioDownload: lastLine.split('|')[0] === '100' && lastLine.split('|')[4] === '1',
         status: lastLine.split('|')[0],
         message: lastLine.split('|')[1]
       })
