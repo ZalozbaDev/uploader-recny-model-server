@@ -59,12 +59,34 @@ export const models: Model[] = [
   {
     name: 'DEVEL',
     title: 'simulator',
-    description: 'jenož za wuwiwarjow',
+    description: 'jenož za wuwiwarjow (spoznawanje)',
     srt: false,
     diarization: false,
     vad: false,
     language: Language.HSB,
     source: 'xxx',
     forceAlign: false
+  },
+  {
+    name: 'WAV2VEC2',
+    title: 'powšitkowny KI model (doporučene)',
+    description: 'za powsitkowne rozmołwy',
+    srt: true,
+    diarization: false,
+    vad: false,
+    language: Language.HSB,
+    source: 'https://...',
+    forceAlign: true
+  },
+  {
+    name: 'DEVEL',
+    title: 'simulator',
+    description: 'jenož za wuwiwarjow (forcealign)',
+    srt: true,
+    diarization: false,
+    vad: false,
+    language: Language.DSB,
+    source: 'xxx',
+    forceAlign: true
   }
 ]
