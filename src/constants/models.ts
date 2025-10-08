@@ -9,6 +9,7 @@ export type Model = {
   vad: boolean
   language: Language
   source: string
+  forceAlign: boolean
 }
 export const models: Model[] = [
   {
@@ -18,8 +19,9 @@ export const models: Model[] = [
     srt: true,
     diarization: true,
     vad: true,
-    language: 'hsb',
+    language: Language.HSB,
     source: 'https://...',
+    forceAlign: false
   },
   {
     name: 'HFDSB',
@@ -28,8 +30,9 @@ export const models: Model[] = [
     srt: true,
     diarization: true,
     vad: true,
-    language: 'dsb',
+    language: Language.DSB,
     source: 'https://...',
+    forceAlign: false
   },
   {
     name: 'BOZA_MSA',
@@ -38,8 +41,9 @@ export const models: Model[] = [
     srt: true,
     diarization: false,
     vad: true,
-    language: 'hsb',
+    language: Language.HSB,
     source: 'Fraunhofer recIKTS',
+    forceAlign: false
   },
   {
     name: 'DEVEL',
@@ -48,7 +52,8 @@ export const models: Model[] = [
     srt: false,
     diarization: false,
     vad: false,
-    language: 'hsb',
+    language: Language.HSB,
     source: 'xxx',
+    forceAlign: false
   }
 ]
