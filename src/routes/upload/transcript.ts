@@ -3,6 +3,7 @@ import { exec } from 'child_process'
 import { upload } from '../../helpers/multer.ts'
 import { sanitize } from '../../helpers/sanitize.ts'
 import { LanguageModel } from '../../types/common.ts'
+import { models } from '../../constants/models.ts'
 
 export const transcript = (app: Express) => {
   app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
@@ -38,19 +39,10 @@ export const transcript = (app: Express) => {
 
     res.status(200).send('File uploaded successfully')
 
-    console.log(`will execute: src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} ${parseOutputFormat(
-        outputFormat
-        )} uploads/${token}/progress.txt`)
-    
     exec(
       `src/scripts/create_transcript.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/progress.txt ${translate} ${diarization} ${vad}`,
-      { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
       (error, stdout, stderr) => {
         app.locals.currentTranscriptRuns -= 1
-
-        console.log(`stdout: ${stdout}`)
-        console.error(`stderr: ${stderr}`)
-
         if (error !== null) {
           console.log(`exec error: ${error}`)
           return res.status(400).send('Error')
@@ -60,57 +52,6 @@ export const transcript = (app: Express) => {
   })
 
   app.get('/models', async (req: Request, res: Response) => {
-    res.status(200).send([
-      {
-        name: 'HFHSB',
-        title: 'powšitkowny KI model (doporučene)',
-        description: 'za powsitkowne rozmołwy',
-        srt: true,
-        diarization: true,
-        vad: true,
-        language: 'hsb',
-        source: 'https://...'
-      },
-      {
-        name: 'HFDSB',
-        title: 'powšitkowny KI model (dokladne, pomalu)',
-        description: 'za powsitkowne rozmołwy',
-        srt: true,
-        diarization: true,
-        vad: true,
-        language: 'dsb',
-        source: 'https://...'
-      },
-      {
-        name: 'BOZA_MSA',
-        title: 'klasiski model za bože mšě',
-        description: 'wusměrjene na cyrkwinsku rěč - Fraunhofer recIKTS',
-        srt: true,
-        diarization: false,
-        vad: true
-        language: 'hsb',
-        source: 'Fraunhofer recIKTS'
-      },
-      {
-        name: 'HFDE',
-        title: 'powšitkowny KI model (dokladne, pomalu)',
-        description: 'za powsitkowne rozmołwy',
-        srt: true,
-        diarization: true,
-        vad: true,
-        language: 'de',
-        source: 'https://...'
-      },
-      {
-        name: 'DEVEL',
-        title: 'simulator',
-        description: 'jenož za wuwiwarjow',
-        srt: false,
-        diarization: false,
-        vad: false,
-        language: 'hsb',
-        source: 'xxx'
-      }
-    ])
+    res.status(200).send(models)
   })
 }
