@@ -1,55 +1,8 @@
-FROM node:20.11.1-bookworm
+FROM offline_transcription_basetrans:latest
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
 # docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
 # docker build -f docker/Dockerfile.transcription -t offline_transcription_back . --no-cache
-
-RUN apt update
-
-RUN apt install -y sox ffmpeg python3 python3-numpy cmake
-
-RUN git clone https://github.com/ZalozbaDev/whisper.cpp.git
-
-RUN cd whisper.cpp && git checkout v1.7.4 && cmake -B build && cmake --build build --config Release
-
-RUN apt install -y build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev
-
-RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz
-
-RUN tar xvfz Python-3.10.0.tgz
-
-RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j8 && make altinstall
-
-#RUN git clone https://github.com/ZalozbaDev/fairseq
-
-#RUN cd fairseq && git checkout e4cebef3bb4e24e08c001d874e88e3bd78295a28
-
-#RUN cd fairseq && python3.10 -m venv .
-
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install wheel==0.42.0'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install cython==3.0.8'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install soundfile==0.12.1'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install editdistance==0.8.1'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install torch==2.2.1'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install hydra-core==1.0.7'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install numpy==1.26.4'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install omegaconf==2.0.6'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install regex==2023.12.25'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install sacrebleu==2.4.0'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install scipy==1.12.0'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install scikit-learn==1.4.1post1'
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install torchaudio==2.2.1'
-
-#RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
-
-## different venv for whisper-ctranslate2
-
-RUN mkdir -p /ctranslate2
-
-RUN cd ctranslate2 && python3.10 -m venv .
-
-RUN cd ctranslate2 && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.4.5'
-
 
 RUN mkdir -p /uploader-recny-model-server/src
 
@@ -57,29 +10,6 @@ COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
 COPY src                                          /uploader-recny-model-server/src
 
 RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
-
-# build executables in this container rather than supplying them externally
-
-RUN apt install -y libhunspell-dev libicu-dev libsndfile1-dev
-
-RUN git clone https://github.com/ZalozbaDev/docker_vosk.git
-RUN cd docker_vosk && git checkout 608ed79aeeb13829d7a85688dcda1099e82bbb2c
-
-RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git webrtc-audio-processing && \
-cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260 && apt install -y meson libabsl-dev && \
-meson . build -Dprefix=$PWD/install && ninja -C build
-
-RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/whisper.cpp.git whisper.cpp && \
-cd whisper.cpp && git checkout v1.7.4 && cmake -B build && cmake --build build --config Release
-
-RUN cd docker_vosk/common/cmdline/ && ./build_recikts.sh
-RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
-
-RUN cp docker_vosk/common/cmdline/recikts_out/recikts_main /
-RUN cp docker_vosk/common/cmdline/whisper_out/whisper_main /
-RUN cp docker_vosk/common/cmdline/whisper_out/*.so /
-
-#####################
 
 COPY docker/startme_transcription.sh /
 
