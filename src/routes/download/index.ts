@@ -23,7 +23,7 @@ export const addDownloadRoute = (app: Express) =>
       console.log(`file: ${file}`)
       return res.download(file)
     } else {
-      const file = `uploads/${token}/${removeExtension(sanitizedFilename)}.outputFormat}`
+      const file = `uploads/${token}/${removeExtension(sanitizedFilename)}.${outputFormat}`
 
       console.log(`file: ${file}`)
       return res.download(file)
