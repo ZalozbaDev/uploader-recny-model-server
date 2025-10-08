@@ -38,6 +38,10 @@ export const transcript = (app: Express) =>
       )} uploads/${token}/progress.txt`,
       (error, stdout, stderr) => {
         app.locals.currentTranscriptRuns -= 1
+
+        console.log(`stdout: ${stdout}`)
+        console.error(`stderr: ${stderr}`)
+
         if (error !== null) {
           console.log(`exec error: ${error}`)
           return res.status(400).send('Error')
