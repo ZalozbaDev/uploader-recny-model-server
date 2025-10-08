@@ -55,7 +55,7 @@ export const slownik = (app: Express) =>
       res.status(200).send('File uploaded successfully')
 
       console.log(
-        `script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
+        `will execute: script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
           outputFormat
         )} uploads/${token}/progress.txt`
       )
@@ -64,8 +64,13 @@ export const slownik = (app: Express) =>
         `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
           outputFormat
         )} uploads/${token}/progress.txt`,
+        { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
         (error, stdout, stderr) => {
           app.locals.currentSlowniktRuns -= 1
+
+          console.log(`stdout: ${stdout}`)
+          console.error(`stderr: ${stderr}`)
+
           if (error !== null) {
             console.log(`exec error: ${error}`)
             return res.status(400).send('Error')

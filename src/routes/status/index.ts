@@ -5,11 +5,14 @@ export const addStatusRoute = (app: Express) =>
   app.get('/status', async (req: Request, res: Response) => {
     if (req.query.token === undefined) {
       res.status(400).send('Token is required')
+      return
     }
+
     await exec(`cat uploads/${req.query.token}/progress.txt`, (error, stdout, stderr) => {
       if (error !== null) {
         console.log(`exec error: ${error}`)
         res.status(400).send('Error')
+        return
       }
 
       const firstLine = stdout.split('\n')[0]

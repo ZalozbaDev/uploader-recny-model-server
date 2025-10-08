@@ -1,0 +1,26 @@
+FROM node:20.11.1-bookworm
+
+# docker build -f docker/Dockerfile.dubbing -t dubbing_back .
+# docker build -f docker/Dockerfile.dubbing -t dubbing_back . --no-cache
+
+RUN apt update && apt install -y python3.11-venv
+
+RUN git clone https://github.com/ZalozbaDev/open-dubbing
+
+RUN cd open-dubbing && python3 -m venv .
+
+RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install .'
+
+
+# copy files from local and install
+
+RUN mkdir -p /uploader-recny-model-server/src
+
+COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
+COPY src                                          /uploader-recny-model-server/src
+
+RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+
+COPY docker/startme_dubbing.sh /
+
+CMD ["/bin/bash", "-c", "/startme_dubbing.sh"] 

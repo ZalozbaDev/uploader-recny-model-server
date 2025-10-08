@@ -16,10 +16,21 @@ app.use(express.json())
 app.locals.currentTranscriptRuns = 0
 app.locals.currentSlowniktRuns = 0
 
-const port =
-  (process.env.SERVER_MODE as SERVER_MODE) === 'FONETISIKI_SLOWNIK'
-    ? process.env.PORT_SLOWNIK
-    : process.env.PORT_TRANSCRIPT
+let port = 0
+switch (process.env.SERVER_MODE) {
+  case 'FONETISIKI_SLOWNIK':
+    port = Number(process.env.PORT_SLOWNIK)
+    break
+  case 'TRANSCRIPT':
+    port = Number(process.env.PORT_TRANSCRIPT)
+    break
+  case 'AI_DUBBING':
+    port = Number(process.env.PORT_AI_DUBBING)
+    break
+  default:
+    console.error('SERVER_MODE is not set correctly in .env file')
+    process.exit(1)
+}
 
 addStatusRoute(app)
 addDownloadRoute(app)
