@@ -1,7 +1,25 @@
-const languageModel = ['FHG', 'HF', 'GMEJ', 'EURO', 'HFBIG', 'FB', 'BOZA_MSA', 'DEVEL', 'HF_PAU', 'HFBIG_PAU', 'BOZA_MSA_PAU', 'GMEJ_PAU', 'GERMAN']
+const languageModel = [
+  'FHG',
+  'HF',
+  'GMEJ',
+  'EURO',
+  'HFBIG',
+  'FB',
+  'BOZA_MSA',
+  'DEVEL',
+  'HF_PAU',
+  'HFBIG_PAU',
+  'BOZA_MSA_PAU',
+  'GMEJ_PAU',
+  'GERMAN'
+]
 export type LanguageModel = (typeof languageModel)[number]
 export const isLanguageModel = (x: any): x is LanguageModel => languageModel.includes(x)
-
+export enum Language {
+  'HSB' = 'hsb',
+  'DSB' = 'dsb',
+  'DE' = 'de'
+}
 export enum OutputFormat {
   'TXT' = 'TXT',
   'SRT' = 'SRT'

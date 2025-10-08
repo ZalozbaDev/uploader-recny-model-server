@@ -1,3 +1,5 @@
+import { Language } from '../types/common.ts'
+
 export type Model = {
   name: string
   title: string
@@ -5,7 +7,7 @@ export type Model = {
   srt: boolean
   diarization: boolean
   vad: boolean
-  language: string
+  language: Language
   source: string
 }
 export const models: Model[] = [
@@ -17,7 +19,7 @@ export const models: Model[] = [
     srt: false,
     diarization: false,
     vad: false,
-    language: 'hsb',
+    language: Language.HSB,
     source: 'https://huggingface.co/models?search=whisper'
   },
   {
