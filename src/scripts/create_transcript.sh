@@ -18,6 +18,14 @@ echo "Format=$OUTFORMAT (ignored)"
 echo "Translate=$TRANSLATE"
 echo "DiarizeSpeakers=$DIARIZATION"
 echo "VAD=$VAD"
+echo "SOTRA_URL=$SOTRA_URL"
+
+OUTFILENAMENOEXT="${SOURCEFILE%.*}"
+CWD=$(pwd)
+echo "Output filename w/o ext: $OUTFILENAMENOEXT"
+echo "CWD: $CWD"
+
+echo "SOTRA_URL=$SOTRA_URL"
 
 touch $PROGRESS
 
@@ -48,15 +56,12 @@ case $MODEL in
 			echo "20|Resampling hotowe" >> $PROGRESS
 			LD_LIBRARY_PATH=/ /whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 			
-			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.srt
-			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
-			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.txt
-			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+			mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
+			mv uploads/${FOLDERNAME}/transcript.txt ${OUTFILENAMENOEXT}.txt
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
-				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -71,8 +76,7 @@ case $MODEL in
 			echo "20|Resampling hotowe" >> $PROGRESS
 			
 			/whisper.cpp/build/bin/whisper-cli -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
-			mv $SOURCEFILE.wav.resample.wav.txt $SOURCEFILE.txt
-			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+			mv $SOURCEFILE.wav.resample.wav.txt ${OUTFILENAMENOEXT}.txt
 			echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
 			
 			# transcript will not be translated
@@ -98,16 +102,12 @@ case $MODEL in
 			LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			
-			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.srt
-			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
-
-			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.txt
-			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+			mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
+			mv uploads/${FOLDERNAME}/transcript.txt ${OUTFILENAMENOEXT}.txt
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
-				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -125,17 +125,14 @@ case $MODEL in
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
-			mv uploads/${FOLDERNAME}/*.srt ${SOURCEFILE}.srt
-			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
-			
+			mv uploads/${FOLDERNAME}/*.srt ${OUTFILENAMENOEXT}.srt
+
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
-			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.txt
-			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+			mv uploads/${FOLDERNAME}/*.rawtxt ${OUTFILENAMENOEXT}.txt
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
-				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -161,6 +158,8 @@ case $MODEL in
 		source bin/activate
 		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
 		popd
+
+		ls -l /uploader-recny-model-server/uploads/${FOLDERNAME}/
 		
 		# TBD which filename?
 		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
@@ -184,10 +183,8 @@ case $MODEL in
 		sleep 5
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		sleep 1
-		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.txt
-		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+		cp $SOURCEFILE.wav.resample.wav.rec.log ${OUTFILENAMENOEXT}.txt
 		echo "100|Podtitle hotowe|1|0|0" >> $PROGRESS
-		echo "----> HOTOWE <----"
 		;;
 
 	FB)
