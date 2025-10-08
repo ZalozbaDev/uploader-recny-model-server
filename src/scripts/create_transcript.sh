@@ -52,7 +52,17 @@ case $MODEL in
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.txt
 			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
-			echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			
+			if [ "$TRANSLATE" = "true" ]; then
+				# run the .srt translation
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				
+				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+			else
+				# nothing more to do
+				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			fi
 			
 		# VAD off, only create transcript
 		else
@@ -65,6 +75,7 @@ case $MODEL in
 			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
 			echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
 			
+			# transcript will not be translated
 		fi
 		;;
 	
@@ -87,12 +98,23 @@ case $MODEL in
 			LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			
-			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.${OUTFORMAT}
+			mv uploads/${FOLDERNAME}/subtitles.srt ${SOURCEFILE}.srt
 			ln -s $(basename $SOURCEFILE.srt) $(echo "${SOURCEFILE%.*}".srt)
 
-			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.${OUTFORMAT}
-			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
-			echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.txt
+			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+			
+			if [ "$TRANSLATE" = "true" ]; then
+				# run the .srt translation
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				
+				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+			else
+				# nothing more to do
+				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			fi
+			
 			
 		# VAD off
 		else
@@ -109,7 +131,18 @@ case $MODEL in
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.txt
 			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
-			echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			
+			if [ "$TRANSLATE" = "true" ]; then
+				# run the .srt translation
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				
+				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+			else
+				# nothing more to do
+				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			fi
+			
 			
 		fi
 		;;
@@ -123,17 +156,15 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
+		
 		pushd /ctranslate2
 		source bin/activate
 		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
 		popd
-		if [ "$OUTFORMAT" = "srt" ]; then
-			mv ${SOURCEFILE%.*}*.srt $(echo "${SOURCEFILE%.*}".srt)
-			echo "100|Podtitle hotowe" >> $PROGRESS
-		else
-			mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".text)
-			echo "100|Tekst hotowe" >> $PROGRESS
-		fi
+		
+		# TBD which filename?
+		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
+		echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
 		;;
 		
 	DEVEL)
@@ -153,14 +184,14 @@ case $MODEL in
 		sleep 5
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		sleep 1
-		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.${OUTFORMAT}
-		ln -s $(basename $SOURCEFILE.${OUTFORMAT}) $(echo "${SOURCEFILE%.*}".${OUTFORMAT})
-		echo "100|Podtitle hotowe" >> $PROGRESS
-		# echo "-1"  >> $PROGRESS
+		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.txt
+		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
+		echo "100|Podtitle hotowe|1|0|0" >> $PROGRESS
 		echo "----> HOTOWE <----"
 		;;
 
 	FB)
+		#### currently unused ###############
 		if [ "$OUTFORMAT" = "text" ]; then
 			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
