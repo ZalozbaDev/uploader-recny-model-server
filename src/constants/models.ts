@@ -18,7 +18,7 @@ export const models: Model[] = [
     srt: true,
     diarization: true,
     vad: true,
-    language: 'hsb',
+    language: Language.HSB,
     source: 'https://...'
   },
   {
@@ -28,7 +28,7 @@ export const models: Model[] = [
     srt: true,
     diarization: true,
     vad: true,
-    language: 'dsb',
+    language: Language.DSB,
     source: 'https://...'
   },
   {
@@ -37,8 +37,8 @@ export const models: Model[] = [
     description: 'wusměrjene na cyrkwinsku rěč - Fraunhofer recIKTS',
     srt: true,
     diarization: false,
-    vad: true
-    language: 'hsb',
+    vad: true,
+    language: Language.HSB,
     source: 'Fraunhofer recIKTS'
   },
   {
@@ -47,8 +47,8 @@ export const models: Model[] = [
     description: 'jenož za wuwiwarjow',
     srt: false,
     diarization: false,
-    vad: false
-    language: 'hsb',
+    vad: false,
+    language: Language.HSB,
     source: 'xxx'
   }
 ]
