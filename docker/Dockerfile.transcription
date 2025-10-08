@@ -4,6 +4,9 @@ MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 # docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
 # docker build -f docker/Dockerfile.transcription -t offline_transcription_back . --no-cache
 
+
+# copy files from local and install
+
 RUN mkdir -p /uploader-recny-model-server/src
 
 COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
