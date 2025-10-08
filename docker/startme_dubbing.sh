@@ -4,4 +4,6 @@ pushd uploader-recny-model-server
 echo "PORT_DUBBING=$PORT_DUBBING" > .env
 popd
 
+echo "HF_TOKEN set to $HF_TOKEN"
+
 cd uploader-recny-model-server && npm run start:dubbing
