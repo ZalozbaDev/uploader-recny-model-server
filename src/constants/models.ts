@@ -14,7 +14,7 @@ export type Model = {
 export const models: Model[] = [
   {
     name: 'HFHSB',
-    title: 'powšitkowny KI model (doporučene)',
+    title: 'powšitkowny KI model "Whisper" (doporučene)',
     description: 'za powsitkowne rozmołwy',
     srt: true,
     diarization: true,
@@ -25,7 +25,7 @@ export const models: Model[] = [
   },
   {
     name: 'HFDSB',
-    title: 'powšitkowny KI model (dokladne, pomalu)',
+    title: 'powšitkowny KI model "Whisper" (dokladne, pomalu)',
     description: 'za powsitkowne rozmołwy',
     srt: true,
     diarization: true,
@@ -69,7 +69,7 @@ export const models: Model[] = [
   },
   {
     name: 'WAV2VEC2',
-    title: 'powšitkowny KI model (doporučene)',
+    title: 'powšitkowny KI model "Wav2Vec2" (doporučene)',
     description: 'za powsitkowne rozmołwy',
     srt: true,
     diarization: false,
