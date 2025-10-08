@@ -55,7 +55,8 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -102,7 +103,18 @@ case $MODEL in
 
 			mv uploads/${FOLDERNAME}/transcript.txt ${SOURCEFILE}.txt
 			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
-			echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			
+			if [ "$TRANSLATE" = "true" ]; then
+				# run the .srt translation
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				
+				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+			else
+				# nothing more to do
+				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			fi
+			
 			
 		# VAD off
 		else
@@ -119,7 +131,18 @@ case $MODEL in
 			python3 $(dirname $0)/log2txt.py $SOURCEFILE.wav.resample.wav.rec.log
 			mv uploads/${FOLDERNAME}/*.rawtxt ${SOURCEFILE}.txt
 			ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".txt)
-			echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			
+			if [ "$TRANSLATE" = "true" ]; then
+				# run the .srt translation
+				$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra_ctranslate:3000/translate"
+				ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+				
+				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+			else
+				# nothing more to do
+				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+			fi
+			
 			
 		fi
 		;;
@@ -133,16 +156,15 @@ case $MODEL in
 		mv $PROGRESS.tmp $PROGRESS
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
+		
 		pushd /ctranslate2
 		source bin/activate
 		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
 		popd
-		if [ "$OUTFORMAT" = "srt" ]; then
-			mv ${SOURCEFILE%.*}*.srt $(echo "${SOURCEFILE%.*}".srt)
-			echo "100|Podtitle hotowe" >> $PROGRESS
-		else
-			mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".text)
-			echo "100|Tekst hotowe" >> $PROGRESS
+		
+		# TBD which filename?
+		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
+		echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
 		fi
 		;;
 		
