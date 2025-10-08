@@ -1,7 +1,7 @@
 FROM node:20.11.1-bookworm
 MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
-# docker build -f docker/Dockerfile.basetrans -t offline_transcription_basetrans .
+# docker build -f docker/Dockerfile.basetrans -t offline_transcription_basetrans . --progress=plain
 # docker build -f docker/Dockerfile.basetrans -t offline_transcription_basetrans . --no-cache
 
 RUN apt update
@@ -73,6 +73,8 @@ RUN cd fairseq && python3.10 -m venv .
 COPY docker/requirements_fairseq.txt fairseq/
 
 RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install -r requirements_fairseq.txt'
+
+RUN cd fairseq && /bin/bash -c 'source bin/activate && which pip && ls -l bin/'
 
 RUN cd fairseq && /bin/bash -c 'source bin/activate && pip install --editable ./'
 

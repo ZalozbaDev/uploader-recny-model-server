@@ -11,3 +11,6 @@ sacrebleu==2.4.0
 scipy==1.12.0
 scikit-learn==1.4.1post1
 torchaudio==2.2.1
+packaging==25.0
+bitarray==3.7.1
+tqdm==4.67.1
