@@ -54,7 +54,7 @@ case $MODEL in
 			
 			sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/ /whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
+			LD_LIBRARY_PATH=/. /whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 			
 			mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
 			mv uploads/${FOLDERNAME}/transcript.txt ${OUTFILENAMENOEXT}.txt
