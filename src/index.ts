@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { SERVER_MODE } from './types/common.js'
 import { addDownloadRoute } from './routes/download/index.ts'
 import { addStatusRoute } from './routes/status/index.ts'
 import { addUploadRoute } from './routes/upload/index.ts'
