@@ -46,6 +46,17 @@ export const models: Model[] = [
     forceAlign: false
   },
   {
+    name: 'GERMAN',
+    title: 'spoznawanje za Nemcinu',
+    description: 'na priklad protokol zetkanja',
+    srt: false,
+    diarization: false,
+    vad: false,
+    language: Language.DE,
+    source: 'whisper large',
+    forceAlign: false
+  },
+  {
     name: 'DEVEL',
     title: 'simulator',
     description: 'jenož za wuwiwarjow',
