@@ -47,7 +47,6 @@ export const transcript = (app: Express) => {
         return res
           .status(400)
           .send('token, audioFile, model, translate, diarization, vad is required')
-        return
       }
       app.locals.currentTranscriptRuns += 1
       const sanitizedAudioFilename = sanitize(audioFile.originalname)
@@ -57,6 +56,9 @@ export const transcript = (app: Express) => {
         executionScript = `src/scripts/create_forcealign.sh ${token} uploads/${token}/${sanitizedAudioFilename} uploads/${token}/${sanitizedTextFilename} ${model} uploads/${token}/progress.txt ${translate}`
       }
       console.log(executionScript)
+
+      res.status(200).send('File uploaded successfully')
+
       exec(
         executionScript,
         { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
