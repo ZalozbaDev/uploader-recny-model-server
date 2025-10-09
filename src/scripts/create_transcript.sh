@@ -161,7 +161,7 @@ case $MODEL in
 		
 		if [ "$DIARIZATION" -gt 0 ]; then
 			# with speaker diarization
-			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --hf_token $HF_TOKEN --speaker_num $DIARIZATION --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --hf_token $HF_TOKEN --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
 		else
 			# no speaker diarization
 			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
