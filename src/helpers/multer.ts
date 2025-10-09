@@ -4,8 +4,10 @@ import * as fs from 'fs'
 // setup multer for file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let token = req.body.token
+    // Get token from query parameters since body is not parsed yet
+    let token = req.query.token as string
     let path = `./uploads/${token}`
+
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path, { recursive: true })
     }

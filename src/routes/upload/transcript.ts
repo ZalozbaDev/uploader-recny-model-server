@@ -20,13 +20,15 @@ export const transcript = (app: Express) => {
           .status(400)
           .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
 
-      const { token, model, translate, diarization, vad } = req.body as {
-        token: string | undefined
+      const { model, translate, diarization, vad } = req.body as {
         model: LanguageModel | undefined
         translate: boolean | undefined
         diarization: number | undefined
         vad: boolean | undefined
       }
+
+      // Get token from query parameters (required for multer) or body as fallback
+      const token = (req.query.token as string) || req.body.token
 
       // Get uploaded files
       const files = req.files as { [fieldname: string]: Express.Multer.File[] }
