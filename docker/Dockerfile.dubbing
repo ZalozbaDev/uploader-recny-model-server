@@ -9,11 +9,12 @@ RUN git clone https://github.com/ZalozbaDev/open-dubbing
 
 RUN cd open-dubbing && python3 -m venv .
 
-RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install pysrt'
+COPY docker/requirements_dubbing.txt open-dubbing/
+
+RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install -r requirements_dubbing.txt'
 RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install .'
 
-RUN apt install -y ffmpeg
-RUN apt install -y sox
+RUN apt install -y ffmpeg sox
 
 # copy files from local and install
 

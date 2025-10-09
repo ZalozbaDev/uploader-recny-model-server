@@ -49,7 +49,7 @@ RUN wget https://www.python.org/ftp/python/3.10.0/Python-3.10.0.tgz
 
 RUN tar xvfz Python-3.10.0.tgz
 
-RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j8 && make altinstall
+RUN cd Python-3.10.0 && ./configure --enable-optimizations --enable-shared && make -j8 && make altinstall
 
 #############################
 # whisper-ctranslate2
@@ -57,7 +57,7 @@ RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j8 && make a
 
 RUN mkdir -p /ctranslate2
 
-RUN apt install -y python3-venv
+RUN apt install -y python3-venv libpython3.11
 
 RUN cd ctranslate2 && python3 -m venv .
 
