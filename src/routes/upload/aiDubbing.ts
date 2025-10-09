@@ -23,8 +23,8 @@ export const aiDubbing = (app: Express) =>
       // Get token from query parameters (required for multer) or body as fallback
       const token = (req.query.token as string) || req.body.token
 
-      if (token === undefined || audioFileName === undefined || srtFileName === undefined) {
-        return res.status(400).send('token, audioFile, srtFile is required')
+      if (token === undefined || audioFileName === undefined) {
+        return res.status(400).send('token, audioFile is required')
       }
 
       app.locals.currentSlowniktRuns += 1
