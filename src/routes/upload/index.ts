@@ -2,15 +2,20 @@ import { Express } from 'express'
 import { SERVER_MODE } from '../../types/common.ts'
 import { transcript } from './transcript.ts'
 import { slownik } from './slownik.ts'
+import { aiDubbing } from './aiDubbing.ts'
 
 export const addUploadRoute = (app: Express) => {
   switch (process.env.SERVER_MODE as SERVER_MODE) {
-    case 'TRANSCRIPT':
+    case SERVER_MODE.TRANSCRIPT:
       transcript(app)
       break
 
-    case 'FONETISIKI_SLOWNIK':
+    case SERVER_MODE.FONETISIKI_SLOWNIK:
       slownik(app)
+      break
+
+    case SERVER_MODE.AI_DUBBING:
+      aiDubbing(app)
       break
 
     default:

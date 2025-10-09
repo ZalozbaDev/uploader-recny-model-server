@@ -36,5 +36,6 @@ export const isLexFormat = (x: any): x is LexFormat => x in LexFormat
 
 export enum SERVER_MODE {
   'FONETISIKI_SLOWNIK' = 'FONETISIKI_SLOWNIK',
-  'TRANSCRIPT' = 'TRANSCRIPT'
+  'TRANSCRIPT' = 'TRANSCRIPT',
+  'AI_DUBBING' = 'AI_DUBBING'
 }

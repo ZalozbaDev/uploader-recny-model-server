@@ -1,0 +1,53 @@
+import { Express, Request, Response } from 'express'
+import { exec } from 'child_process'
+import { upload } from '../../helpers/multer.ts'
+
+export const aiDubbing = (app: Express) =>
+  app.post(
+    '/upload',
+    upload.fields([{ name: 'audioFile' }, { name: 'srtFile' }]),
+    async (req: Request, res: Response) => {
+      if (app.locals.currentSlowniktRuns > 5)
+        return res
+          .status(400)
+          .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
+
+      const { token, audioFileName, srtFileName } = req.body as {
+        token: string | undefined
+        audioFileName: string | undefined
+        srtFileName: string | undefined
+      }
+
+      if (token === undefined || audioFileName === undefined || srtFileName === undefined) {
+        return res.status(400).send('token, audioFile, srtFile is required')
+      }
+
+      app.locals.currentSlowniktRuns += 1
+
+      res.status(200).send('File uploaded successfully')
+
+      console.log(
+        `will execute: script ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
+          srtFileName !== 'none' ? 'true' : 'false'
+        } uploads/${token}/${srtFileName}`
+      )
+
+      exec(
+        `src/scripts/create_dubbing.sh ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
+          srtFileName !== 'none' ? 'true' : 'false'
+        } uploads/${token}/${srtFileName}`,
+        { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
+        (error, stdout, stderr) => {
+          app.locals.currentSlowniktRuns -= 1
+
+          console.log(`stdout: ${stdout}`)
+          console.error(`stderr: ${stderr}`)
+
+          if (error !== null) {
+            console.log(`exec error: ${error}`)
+            return res.status(400).send('Error')
+          }
+        }
+      )
+    }
+  )
