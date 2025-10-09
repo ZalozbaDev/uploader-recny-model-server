@@ -27,6 +27,8 @@ echo "CWD: $CWD"
 
 echo "SOTRA_URL=$SOTRA_URL"
 
+echo "HF_TOKEN=$HF_TOKEN"
+
 touch $PROGRESS
 
 # list all currently used models here
@@ -156,13 +158,21 @@ case $MODEL in
 		
 		pushd /ctranslate2
 		source bin/activate
-		whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+		
+		if [ "$DIARIZATION" -gt 0 ]; then
+			# with speaker diarization
+			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --hf_token $HF_TOKEN --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+		else
+			# no speaker diarization
+			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+		fi
 		popd
 
 		ls -l /uploader-recny-model-server/uploads/${FOLDERNAME}/
 		
 		# TBD which filename?
-		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
+		# mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
+		mv $SOURCEFILE.wav.resample.wav ${OUTFILENAMENOEXT}.txt
 		echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
 		;;
 		
