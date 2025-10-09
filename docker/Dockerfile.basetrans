@@ -39,6 +39,7 @@ RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
 RUN cp docker_vosk/common/cmdline/recikts_out/recikts_main /
 RUN cp docker_vosk/common/cmdline/whisper_out/whisper_main /
 RUN cp docker_vosk/common/cmdline/whisper_out/*.so /
+RUN cp docker_vosk/common/cmdline/whisper_out/*.so.1 /
 
 #############################
 # python 3.10
