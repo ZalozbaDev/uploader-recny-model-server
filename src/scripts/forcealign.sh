@@ -3,7 +3,7 @@
 pushd /forcealign
 source bin/activate
 
-echo "forcealign called with args 1=$1 2=$2 3=$3"
+echo "forcealign called with args $1 , $2 , $3"
 
 ffmpeg -i $1 $1.wav
 
