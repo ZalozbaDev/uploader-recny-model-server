@@ -3,14 +3,14 @@
 pushd /open-dubbing
 source bin/activate
 
-echo "open-dubbing called with args 1=$1 2=$2 3=$3"
+echo "open-dubbing called with args $1 , $2 , $3"
 
-$FILENAME=$1
-$OUTDIR=$2
+FILENAME=$1
+OUTDIR=$2
 
 if [ "$#" -eq 3 ]; then
 	echo "Have SRT"
-	$SUBSFILE=$3
+	SUBSFILE=$3
 	open-dubbing --input_file $FILENAME --source_language deu --target_language hsb \
 	--hugging_face_token $HF_TOKEN --output_directory $OUTDIR \
 	--translator sotra --apertium_server http://sotra-fairseq:3000/translate \
