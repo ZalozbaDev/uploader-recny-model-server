@@ -14,7 +14,7 @@ export const addUploadRoute = (app: Express) => {
       slownik(app)
       break
 
-    case SERVER_MODE.AI_DUBBING:
+    case SERVER_MODE.DUBBING:
       aiDubbing(app)
       break
 
