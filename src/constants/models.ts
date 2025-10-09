@@ -14,8 +14,8 @@ export type Model = {
 export const models: Model[] = [
   {
     name: 'HFHSB',
-    title: 'powšitkowny KI model "Whisper" (doporučene)',
-    description: 'za powsitkowne rozmołwy',
+    title: 'hornjoserbski KI model "Whisper" (doporučeny)',
+    description: 'powšitkowne rozmołwy',
     srt: true,
     diarization: true,
     vad: true,
@@ -25,8 +25,8 @@ export const models: Model[] = [
   },
   {
     name: 'HFDSB',
-    title: 'powšitkowny KI model "Whisper" (dokladne, pomalu)',
-    description: 'za powsitkowne rozmołwy',
+    title: 'delnoserbski KI model "Whisper" (dokładny, pomały)',
+    description: 'za rozmołwy wšědneho dnja',
     srt: true,
     diarization: true,
     vad: true,
@@ -36,8 +36,8 @@ export const models: Model[] = [
   },
   {
     name: 'BOZA_MSA',
-    title: 'klasiski model za bože mšě',
-    description: 'wusměrjene na cyrkwinsku rěč - Fraunhofer recIKTS',
+    title: 'hornjoserbski klasiski model za bože mšě',
+    description: 'm.d. tež bibliske teksty - Fraunhofer recIKTS',
     srt: true,
     diarization: false,
     vad: true,
@@ -47,8 +47,8 @@ export const models: Model[] = [
   },
   {
     name: 'GERMAN',
-    title: 'spoznawanje za Nemcinu',
-    description: 'na priklad protokol zetkanja',
+    title: 'rěčne spóznawanje němčiny',
+    description: 'na př. za protokoly konferencow',
     srt: false,
     diarization: false,
     vad: false,
@@ -59,7 +59,7 @@ export const models: Model[] = [
   {
     name: 'DEVEL',
     title: 'simulator',
-    description: 'jenož za wuwiwarjow (spoznawanje)',
+    description: 'za wuwiwarjow (ryzy spóznawanje)',
     srt: false,
     diarization: false,
     vad: false,
@@ -69,8 +69,8 @@ export const models: Model[] = [
   },
   {
     name: 'WAV2VEC2',
-    title: 'powšitkowny KI model "Wav2Vec2" (doporučene)',
-    description: 'za powsitkowne rozmołwy',
+    title: 'powšitkowny hornjoserbski KI model "Wav2Vec2" (doporučeny)',
+    description: 'na př. wobchadnorěčne rozmołwy',
     srt: true,
     diarization: false,
     vad: false,
