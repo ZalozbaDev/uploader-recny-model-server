@@ -17,7 +17,7 @@ app.locals.currentTranscriptRuns = 0
 app.locals.currentSlowniktRuns = 0
 
 let port = 0
-switch (process.env.SERVER_MODE) {
+switch (process.env.SERVER_MODE as SERVER_MODE) {
   case SERVER_MODE.FONETISIKI_SLOWNIK:
     port = Number(process.env.PORT_SLOWNIK)
     break
