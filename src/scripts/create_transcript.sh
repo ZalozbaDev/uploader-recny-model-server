@@ -61,7 +61,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -107,7 +107,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
@@ -132,7 +132,7 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
 				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
 			else
