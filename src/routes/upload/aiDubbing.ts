@@ -33,13 +33,13 @@ export const aiDubbing = (app: Express) =>
 
       console.log(
         `will execute: script ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
-          srtFileName !== 'none' ? 'true' : 'false'
+          srtFileName !== undefined ? 'true' : 'false'
         } uploads/${token}/${srtFileName}`
       )
 
       exec(
         `src/scripts/create_dubbing.sh ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
-          srtFileName !== 'none' ? 'true' : 'false'
+          srtFileName !== undefined ? 'true' : 'false'
         } uploads/${token}/${srtFileName}`,
         { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
         (error, stdout, stderr) => {
