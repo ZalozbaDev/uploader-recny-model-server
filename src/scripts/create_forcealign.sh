@@ -15,22 +15,30 @@ echo "Model=$MODEL"
 echo "Postup=$PROGRESS"
 echo "Translate=$TRANSLATE"
 
+OUTFILENAMENOEXT="${SOURCEFILE%.*}"
+CWD=$(pwd)
+echo "Output filename w/o ext: $OUTFILENAMENOEXT"
+echo "CWD: $CWD"
+
+echo "SOTRA_URL=$SOTRA_URL"
+
 touch $PROGRESS
 
 case $MODEL in
 
 	WAV2VEC2)
-		$(dirname $0)/forcealign.sh $SOURCEFILE $TEXTFILE $SOURCEFILE.srt
+		echo "0|Wobdźěłam $SOURCEFILE a $TEXTFILE" >> $PROGRESS
+		
+		$(dirname $0)/forcealign.sh ${CWD}/$SOURCEFILE ${CWD}/$TEXTFILE ${CWD}/${OUTFILENAMENOEXT}.srt
 		
 		if [ "$TRANSLATE" = "true" ]; then
 			# run the .srt translation
-			$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
-			ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
+			$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 			
-			echo "100|Podtitle hotowe|0|1|1" >> $PROGRESS
+			echo "100|Podtitle hotowe|0|1|0|1" >> $PROGRESS
 		else
 			# nothing more to do
-			echo "100|Podtitle hotowe|0|1|0" >> $PROGRESS
+			echo "100|Podtitle hotowe|0|1|0|0" >> $PROGRESS
 		fi
 		;;
 	
@@ -56,7 +64,7 @@ case $MODEL in
 		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.txt
 		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".srt)
 		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}"_de.srt)
-		echo "100|Podtitle hotowe|0|1|1" >> $PROGRESS
+		echo "100|Podtitle hotowe|0|1|0|1" >> $PROGRESS
 		echo "----> HOTOWE <----"
 		;;
 

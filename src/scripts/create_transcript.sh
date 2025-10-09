@@ -61,12 +61,12 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
-				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|1" >> $PROGRESS
 			else
 				# nothing more to do
-				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|0" >> $PROGRESS
 			fi
 			
 		# VAD off, only create transcript
@@ -77,7 +77,7 @@ case $MODEL in
 			
 			/whisper.cpp/build/bin/whisper-cli -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
 			mv $SOURCEFILE.wav.resample.wav.txt ${OUTFILENAMENOEXT}.txt
-			echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
+			echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
 			
 			# transcript will not be translated
 		fi
@@ -107,12 +107,12 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
-				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|1" >> $PROGRESS
 			else
 				# nothing more to do
-				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|0" >> $PROGRESS
 			fi
 			
 			
@@ -132,12 +132,12 @@ case $MODEL in
 			
 			if [ "$TRANSLATE" = "true" ]; then
 				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}_de.srt hsb de $SOTRA_URL
+				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
 				
-				echo "100|Podtitle hotowe|1|1|1" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|1" >> $PROGRESS
 			else
 				# nothing more to do
-				echo "100|Podtitle hotowe|1|1|0" >> $PROGRESS
+				echo "100|Podtitle hotowe|1|1|0|0" >> $PROGRESS
 			fi
 			
 			
@@ -163,7 +163,7 @@ case $MODEL in
 		
 		# TBD which filename?
 		mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
-		echo "100|Transkript hotowe|1|0|0" >> $PROGRESS
+		echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
 		;;
 		
 	DEVEL)
@@ -184,7 +184,7 @@ case $MODEL in
 		echo "80|Spóznawanje hotowe" >> $PROGRESS
 		sleep 1
 		cp $SOURCEFILE.wav.resample.wav.rec.log ${OUTFILENAMENOEXT}.txt
-		echo "100|Podtitle hotowe|1|0|0" >> $PROGRESS
+		echo "100|Podtitle hotowe|1|0|0|0" >> $PROGRESS
 		;;
 
 	FB)
