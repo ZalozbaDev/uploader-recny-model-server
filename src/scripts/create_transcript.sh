@@ -172,8 +172,9 @@ case $MODEL in
 		
 		# TBD which filename?
 		# mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
-		mv $SOURCEFILE.wav.resample.wav ${OUTFILENAMENOEXT}.txt
-		echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
+		mv $SOURCEFILE.wav.resample.txt ${OUTFILENAMENOEXT}.txt
+		mv $SOURCEFILE.wav.resample.srt ${OUTFILENAMENOEXT}.de.srt
+		echo "100|Transkript hotowe|1|0|0|1" >> $PROGRESS
 		;;
 		
 	DEVEL)
