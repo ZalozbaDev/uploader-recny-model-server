@@ -1,14 +1,5 @@
 import { OutputFormat, LexFormat } from '../types/common.ts'
 
-export const parseOutputFormat = (outputFormat: OutputFormat): string => {
-  switch (outputFormat) {
-    case OutputFormat.SRT:
-      return 'srt'
-    case OutputFormat.TXT:
-      return 'text'
-  }
-}
-
 export const parseLexFormat = (lexFormat: LexFormat): string => {
   switch (lexFormat) {
     case LexFormat.SAMPA:

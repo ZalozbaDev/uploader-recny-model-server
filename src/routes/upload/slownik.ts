@@ -1,9 +1,8 @@
 import { Express, Request, Response } from 'express'
 import { exec } from 'child_process'
 import { upload } from '../../helpers/multer.ts'
-import { parseOutputFormat } from '../../helpers/parser.ts'
 import { sanitize } from '../../helpers/sanitize.ts'
-import { LanguageModel, OutputFormat } from '../../types/common.ts'
+import { LanguageModel } from '../../types/common.ts'
 
 export const slownik = (app: Express) =>
   app.post(
@@ -15,29 +14,20 @@ export const slownik = (app: Express) =>
           .status(400)
           .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
 
-      const {
-        token,
-        filename,
-        languageModel,
-        outputFormat,
-        korpusname,
-        phonmapname,
-        exceptionsname
-      } = req.body as {
-        token: string | undefined
-        filename: string | undefined
-        languageModel: LanguageModel | undefined
-        outputFormat: OutputFormat | undefined
-        korpusname: string | undefined
-        phonmapname: string | undefined
-        exceptionsname: string | undefined
-      }
+      const { token, filename, languageModel, korpusname, phonmapname, exceptionsname } =
+        req.body as {
+          token: string | undefined
+          filename: string | undefined
+          languageModel: LanguageModel | undefined
+          korpusname: string | undefined
+          phonmapname: string | undefined
+          exceptionsname: string | undefined
+        }
 
       if (
         token === undefined ||
         filename === undefined ||
         languageModel === undefined ||
-        outputFormat === undefined ||
         korpusname === undefined ||
         phonmapname === undefined ||
         exceptionsname === undefined
@@ -55,15 +45,11 @@ export const slownik = (app: Express) =>
       res.status(200).send('File uploaded successfully')
 
       console.log(
-        `will execute: script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
-          outputFormat
-        )} uploads/${token}/progress.txt`
+        `will execute: script ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${languageModel} uploads/${token}/progress.txt`
       )
 
       exec(
-        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${parseOutputFormat(
-          outputFormat
-        )} uploads/${token}/progress.txt`,
+        `src/scripts/create_dictionary.sh ${token} uploads/${token}/${sanitizedFilename} ${languageModel} uploads/${token}/phonmap/${phonmapname} uploads/${token}/exceptions/${exceptionsname} uploads/${token}/korpus/${korpusname} ${languageModel} uploads/${token}/progress.txt`,
         { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
         (error, stdout, stderr) => {
           app.locals.currentSlowniktRuns -= 1
