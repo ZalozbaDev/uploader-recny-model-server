@@ -1,2 +1,2 @@
 whisper-ctranslate2==0.4.5
-pyannote.audio==4.0.0
+pyannote.audio==3.4.0
