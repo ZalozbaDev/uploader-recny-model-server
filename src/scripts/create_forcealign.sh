@@ -20,6 +20,8 @@ touch $PROGRESS
 case $MODEL in
 
 	WAV2VEC2)
+		echo "0|Wobdźěłam $SOURCEFILE a $TEXTFILE" >> $PROGRESS
+		
 		$(dirname $0)/forcealign.sh $SOURCEFILE $TEXTFILE $SOURCEFILE.srt
 		
 		if [ "$TRANSLATE" = "true" ]; then
@@ -27,10 +29,10 @@ case $MODEL in
 			$(dirname $0)/translate_srt.sh ${SOURCEFILE}.srt ${SOURCEFILE}_de.srt hsb de "http://sotra-fairseq:3000/translate"
 			ln -s $(basename ${SOURCEFILE}_de.srt) $(echo "${SOURCEFILE%.*}"_de.srt)
 			
-			echo "100|Podtitle hotowe|0|1|1" >> $PROGRESS
+			echo "100|Podtitle hotowe|0|1|0|1" >> $PROGRESS
 		else
 			# nothing more to do
-			echo "100|Podtitle hotowe|0|1|0" >> $PROGRESS
+			echo "100|Podtitle hotowe|0|1|0|0" >> $PROGRESS
 		fi
 		;;
 	
@@ -56,7 +58,7 @@ case $MODEL in
 		cp $SOURCEFILE.wav.resample.wav.rec.log ${SOURCEFILE}.txt
 		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}".srt)
 		ln -s $(basename $SOURCEFILE.txt) $(echo "${SOURCEFILE%.*}"_de.srt)
-		echo "100|Podtitle hotowe|0|1|1" >> $PROGRESS
+		echo "100|Podtitle hotowe|0|1|0|1" >> $PROGRESS
 		echo "----> HOTOWE <----"
 		;;
 

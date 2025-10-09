@@ -23,4 +23,4 @@ else
 	$(dirname $0)/dubbing.sh $SOURCEFILE $FOLDERNAME
 fi
 
-echo "100|Dubbing hotowe|0|0|0" >> $PROGRESS
+echo "100|Dubbing hotowe|0|0|1|0" >> $PROGRESS
