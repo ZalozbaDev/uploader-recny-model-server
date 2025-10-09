@@ -12,6 +12,8 @@ RUN cd open-dubbing && python3 -m venv .
 RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install pysrt'
 RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install .'
 
+RUN apt install -y ffmpeg
+RUN apt install -y sox
 
 # copy files from local and install
 
