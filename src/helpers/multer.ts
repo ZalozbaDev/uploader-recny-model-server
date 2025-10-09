@@ -1,5 +1,6 @@
 import multer from 'multer'
 import * as fs from 'fs'
+import { SERVER_MODE } from '../types/common.ts'
 
 // setup multer for file upload
 const storage = multer.diskStorage({
@@ -12,7 +13,7 @@ const storage = multer.diskStorage({
       fs.mkdirSync(path, { recursive: true })
     }
 
-    if (process.env.SERVER_MODE === 'FONETISIKI_SLOWNIK') {
+    if (process.env.SERVER_MODE !== SERVER_MODE.TRANSCRIPT) {
       path = `./uploads/${token}/${file.fieldname}`
       if (!fs.existsSync(path)) {
         fs.mkdirSync(path, { recursive: true })

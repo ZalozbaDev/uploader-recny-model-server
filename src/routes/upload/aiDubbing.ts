@@ -5,18 +5,23 @@ import { upload } from '../../helpers/multer.ts'
 export const aiDubbing = (app: Express) =>
   app.post(
     '/upload',
-    upload.fields([{ name: 'audioFile' }, { name: 'srtFile' }]),
+    upload.fields([
+      { name: 'audioFile', maxCount: 1 },
+      { name: 'srtFile', maxCount: 1 }
+    ]),
     async (req: Request, res: Response) => {
       if (app.locals.currentSlowniktRuns > 5)
         return res
           .status(400)
           .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
 
-      const { token, audioFileName, srtFileName } = req.body as {
-        token: string | undefined
+      const { audioFileName, srtFileName } = req.body as {
         audioFileName: string | undefined
         srtFileName: string | undefined
       }
+
+      // Get token from query parameters (required for multer) or body as fallback
+      const token = (req.query.token as string) || req.body.token
 
       if (token === undefined || audioFileName === undefined || srtFileName === undefined) {
         return res.status(400).send('token, audioFile, srtFile is required')

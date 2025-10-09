@@ -7,22 +7,27 @@ import { LanguageModel } from '../../types/common.ts'
 export const slownik = (app: Express) =>
   app.post(
     '/upload',
-    upload.fields([{ name: 'korpus' }, { name: 'exceptions' }, { name: 'phonmap' }]),
+    upload.fields([
+      { name: 'korpus', maxCount: 1 },
+      { name: 'exceptions', maxCount: 1 },
+      { name: 'phonmap', maxCount: 1 }
+    ]),
     async (req: Request, res: Response) => {
       if (app.locals.currentSlowniktRuns > 5)
         return res
           .status(400)
           .send('Wšitke servere su hižo wobsadźene. Prošu spytaj pozdźišo hišće raz.')
 
-      const { token, filename, languageModel, korpusname, phonmapname, exceptionsname } =
-        req.body as {
-          token: string | undefined
-          filename: string | undefined
-          languageModel: LanguageModel | undefined
-          korpusname: string | undefined
-          phonmapname: string | undefined
-          exceptionsname: string | undefined
-        }
+      const { filename, languageModel, korpusname, phonmapname, exceptionsname } = req.body as {
+        filename: string | undefined
+        languageModel: LanguageModel | undefined
+        korpusname: string | undefined
+        phonmapname: string | undefined
+        exceptionsname: string | undefined
+      }
+
+      // Get token from query parameters (required for multer) or body as fallback
+      const token = (req.query.token as string) || req.body.token
 
       if (
         token === undefined ||
