@@ -28,6 +28,8 @@ echo "Phonmap=$PHONMAP"
 echo "Exceptions=$EXCEPTIONS"
 echo "Corpus=$CORPUS"
 
+OUTFILENAMENOEXT="${SOURCEFILE%.*}"
+
 touch $PROGRESS
 
 echo "0|Wobdźěłam $CORPUS" >> $PROGRESS
@@ -59,17 +61,17 @@ echo "80|Słownik hotowe" >> $PROGRESS
 case $OUTFORMAT in
 
 	SAMPA)
-		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.lex $(echo "${SOURCEFILE%.*}".lex)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.lex ${OUTFILENAMENOEXT}.txt
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
 	KALDI)
-		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.klex $(echo "${SOURCEFILE%.*}".klex)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.klex ${OUTFILENAMENOEXT}.txt
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
 	UASR)
-		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.ulex $(echo "${SOURCEFILE%.*}".ulex)
+		ln -s corpus_creator/output/uasr_configurations/lexicon/web_phonetics_sampa.ulex ${OUTFILENAMENOEXT}.txt
 		echo "100|Hotowe" >> $PROGRESS
 		;;
 	
