@@ -16,7 +16,7 @@ echo "SRTFILE=$SRTFILE"
 OUTFILENAMENOEXT="${SOURCEFILE%.*}"
 CWD=$(pwd)
 
-OUTFILENAMENOEXT=$(echo $OUTFILENAMENOEXT | sed -e s/audioFile\///)
+OUTFILENAMENOEXT=$( echo $OUTFILENAMENOEXT | sed -e 's/audioFile\///g' )
 
 echo "Basename for saving results: $OUTFILENAMENOEXT"
 
@@ -42,8 +42,8 @@ if [ "$SRTAVAILABLE" = "true" ]; then
 	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/ ${INSRTNAME} 
 
 	# move results to expected places
-	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
-	mv $FOLDERNAME/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
+	mv uploads/${FOLDERNAME}/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
+	mv uploads/${FOLDERNAME}/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
 	
 	# only video and translated subs are available (original subs were provided)
 	echo "100|Dubbing hotowe|0|1|1|0" >> $PROGRESS
@@ -53,9 +53,9 @@ else
 	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/
 
 	# move results to expected places
-	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.hsb.mp4
-	mv $FOLDERNAME/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
-	mv $FOLDERNAME/dubbing/deu.srt              ${OUTFILENAMENOEXT}.de.srt
+	mv uploads/${FOLDERNAME}/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.hsb.mp4
+	mv uploads/${FOLDERNAME}/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
+	mv uploads/${FOLDERNAME}/dubbing/deu.srt              ${OUTFILENAMENOEXT}.de.srt
 	
 	# video and both subs (original, translated) are available
 	echo "100|Dubbing hotowe|0|1|1|1" >> $PROGRESS
