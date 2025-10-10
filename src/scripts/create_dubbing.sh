@@ -39,7 +39,7 @@ if [ "$SRTAVAILABLE" = "true" ]; then
 	mv $SOURCEFILE $INFOLDERNAME
 	mv $SRTFILE    $INFOLDERNAME
 	
-	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/${FOLDERNAME}/dubbing/ ${INSRTNAME} 
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/ ${INSRTNAME} 
 
 	# move results to expected places
 	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
@@ -50,7 +50,7 @@ if [ "$SRTAVAILABLE" = "true" ]; then
 else
 	mv $SOURCEFILE $INFOLDERNAME
 	
-	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/${FOLDERNAME}/dubbing/
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/
 
 	# move results to expected places
 	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.hsb.mp4
