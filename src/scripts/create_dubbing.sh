@@ -23,8 +23,19 @@ touch $PROGRESS
 
 echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 
+INFOLDERNAME=${CWD}/uploads/${FOLDERNAME}/input/
+mkdir -p $INFOLDERNAME
+
+INSOURCENAME=${INFOLDERNAME}/$(basename $SOURCEFILE)
+INSRTNAME==${INFOLDERNAME}/$(basename $SRTFILE)
+
+echo "---> New input files: $INSOURCENAME , $INSRTNAME"
+
 if [ "$SRTAVAILABLE" = "true" ]; then
-	$(dirname $0)/dubbing.sh ${CWD}/${SOURCEFILE} ${CWD}/${FOLDERNAME}/dubbing/ ${CWD}/${SRTFILE} 
+	mv $SOURCEFILE $INFOLDERNAME
+	mv $SRTFILE    $INFOLDERNAME
+	
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/${FOLDERNAME}/dubbing/ ${INSRTNAME} 
 
 	# move results to expected places
 	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
@@ -33,7 +44,9 @@ if [ "$SRTAVAILABLE" = "true" ]; then
 	# only video and translated subs are available (original subs were provided)
 	echo "100|Dubbing hotowe|0|1|1|0" >> $PROGRESS
 else
-	$(dirname $0)/dubbing.sh ${CWD}/${SOURCEFILE} ${CWD}/${FOLDERNAME}/dubbing/
+	mv $SOURCEFILE $INFOLDERNAME
+	
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/${FOLDERNAME}/dubbing/
 
 	# move results to expected places
 	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
