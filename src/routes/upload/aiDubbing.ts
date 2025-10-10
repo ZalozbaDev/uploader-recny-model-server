@@ -32,15 +32,15 @@ export const aiDubbing = (app: Express) =>
       res.status(200).send('File uploaded successfully')
 
       console.log(
-        `will execute: script ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
+        `will execute: script ${token} uploads/${token}/audioFile/${audioFileName} uploads/${token}/progress.txt ${
           srtFileName !== undefined ? 'true' : 'false'
-        } uploads/${token}/${srtFileName}`
+        } uploads/${token}/srtFile/${srtFileName}`
       )
 
       exec(
-        `src/scripts/create_dubbing.sh ${token} uploads/${token}/${audioFileName} uploads/${token}/progress.txt ${
+        `src/scripts/create_dubbing.sh ${token} uploads/${token}/audioFile/${audioFileName} uploads/${token}/progress.txt ${
           srtFileName !== undefined ? 'true' : 'false'
-        } uploads/${token}/${srtFileName}`,
+        } uploads/${token}/srtFile/${srtFileName}`,
         { maxBuffer: 1024 * 1024 * 20 }, // 20 MB statt 200 KB
         (error, stdout, stderr) => {
           app.locals.currentSlowniktRuns -= 1
