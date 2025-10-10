@@ -3,7 +3,9 @@
 ## Container(y) twarić
 
 ```code
+docker build -f docker/Dockerfile.basetrans     -t offline_transcription_basetrans . --progress=plain
 docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
+docker build -f docker/Dockerfile.dubbing       -t dubbing_back .
 docker build -f docker/Dockerfile.phonetics     -t phonetics_back .
 ```
 

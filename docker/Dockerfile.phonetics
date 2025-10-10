@@ -12,8 +12,6 @@ RUN apt update
 
 RUN apt install -y python3-numpy python3-yaml
 
-RUN touch OPP
-
 # copy files from local and install
 
 RUN mkdir -p /uploader-recny-model-server/src

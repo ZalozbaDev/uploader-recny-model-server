@@ -20,7 +20,18 @@ export const models: Model[] = [
     diarization: true,
     vad: true,
     language: Language.HSB,
-    source: 'https://...',
+    source: 'https://huggingface.co/spaces/Korla/hsb_stt_demo',
+    forceAlign: false
+  },
+  {
+    name: 'HFHSBBIG',
+    title: 'hornjoserbski KI model "Whisper" (dokładny, pomały)',
+    description: 'za rozmołwy wšědneho dnja',
+    srt: true,
+    diarization: true,
+    vad: true,
+    language: Language.HSB,
+    source: 'https://huggingface.co/Korla/whisper-large-v3-turbo-hsb',
     forceAlign: false
   },
   {
@@ -31,7 +42,7 @@ export const models: Model[] = [
     diarization: true,
     vad: true,
     language: Language.DSB,
-    source: 'https://...',
+    source: 'https://huggingface.co/Korla/whisper-large-v3-turbo-dsb',
     forceAlign: false
   },
   {
@@ -42,7 +53,7 @@ export const models: Model[] = [
     diarization: false,
     vad: true,
     language: Language.HSB,
-    source: 'Fraunhofer recIKTS',
+    source: 'https://www.ikts.fraunhofer.de/de/abteilungen/elektronik_mikrosystem_biomedizintechnik/pruef_analysesysteme/kognitive_materialdiagnostik.html',
     forceAlign: false
   },
   {
@@ -53,7 +64,7 @@ export const models: Model[] = [
     diarization: false,
     vad: false,
     language: Language.DE,
-    source: 'whisper large',
+    source: 'https://huggingface.co/openai/whisper-large-v2',
     forceAlign: false
   },
   {
@@ -64,7 +75,7 @@ export const models: Model[] = [
     diarization: false,
     vad: false,
     language: Language.HSB,
-    source: 'xxx',
+    source: 'jenoz za wuwice',
     forceAlign: false
   },
   {
@@ -75,7 +86,7 @@ export const models: Model[] = [
     diarization: false,
     vad: false,
     language: Language.HSB,
-    source: 'https://...',
+    source: 'https://huggingface.co/Korla/Wav2Vec2BertForCTC-hsb',
     forceAlign: true
   },
   {
@@ -86,7 +97,7 @@ export const models: Model[] = [
     diarization: false,
     vad: false,
     language: Language.DSB,
-    source: 'xxx',
+    source: 'jenoz za wuwice',
     forceAlign: true
   }
 ]

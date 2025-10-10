@@ -18,7 +18,6 @@ echo "Format=$OUTFORMAT (ignored)"
 echo "Translate=$TRANSLATE"
 echo "DiarizeSpeakers=$DIARIZATION"
 echo "VAD=$VAD"
-echo "SOTRA_URL=$SOTRA_URL"
 
 OUTFILENAMENOEXT="${SOURCEFILE%.*}"
 CWD=$(pwd)
@@ -26,7 +25,6 @@ echo "Output filename w/o ext: $OUTFILENAMENOEXT"
 echo "CWD: $CWD"
 
 echo "SOTRA_URL=$SOTRA_URL"
-
 echo "HF_TOKEN=$HF_TOKEN"
 
 touch $PROGRESS
@@ -36,53 +34,21 @@ touch $PROGRESS
 RECIKTS_MODEL_BOZA_MSA=misa_2024_08_02.cfg
 WHISPER_MODEL_HSB=/whisper/hsb/whisper_small/ggml-model.bin
 WHISPER_MODEL_HSB_BIG=/whisper/Korla/whisper_large_v3_turbo_hsb/ggml-model.bin
+WHISPER_MODEL_DSB_BIG=/whisper/Korla/whisper_large_v3_turbo_dsb/ggml-model.bin
 WHISPER_MODEL_GERMAN=large-v2
 
 case $MODEL in
 
 	HFHSB)
-		# video --> audio
-		echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-		ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-		DURATION=$(soxi -D $SOURCEFILE.wav)
-		echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-		cat $PROGRESS >> $PROGRESS.tmp
-		mv $PROGRESS.tmp $PROGRESS
-		
-		# this model does not diarize
-		
-		# VAD on
-		if [ "$VAD" = "true" ]; then
-			
-			sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/. /whisper_main /whisper/hsb/whisper_small/ggml-model.bin $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
-			
-			mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
-			mv uploads/${FOLDERNAME}/transcript.txt ${OUTFILENAMENOEXT}.txt
-			
-			if [ "$TRANSLATE" = "true" ]; then
-				# run the .srt translation
-				$(dirname $0)/translate_srt.sh ${CWD}/${OUTFILENAMENOEXT}.srt ${CWD}/${OUTFILENAMENOEXT}.de.srt hsb de $SOTRA_URL
-				
-				echo "100|Podtitle hotowe|1|1|0|1" >> $PROGRESS
-			else
-				# nothing more to do
-				echo "100|Podtitle hotowe|1|1|0|0" >> $PROGRESS
-			fi
-			
-		# VAD off, only create transcript
-		else
-			
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			
-			/whisper.cpp/build/bin/whisper-cli -m /whisper/hsb/whisper_small/ggml-model.bin --output-txt -f $SOURCEFILE.wav.resample.wav
-			mv $SOURCEFILE.wav.resample.wav.txt ${OUTFILENAMENOEXT}.txt
-			echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
-			
-			# transcript will not be translated
-		fi
+		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_HSB $PROGRESS $TRANSLATE $DIARIZATION $VAD
+		;;
+	
+	HFHSBBIG)
+		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_HSB_BIG $PROGRESS $TRANSLATE $DIARIZATION $VAD
+		;;
+	
+	HFDSB)
+		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_DSB_BIG $PROGRESS $TRANSLATE $DIARIZATION $VAD
 		;;
 	
 	BOZA_MSA)
@@ -172,8 +138,9 @@ case $MODEL in
 		
 		# TBD which filename?
 		# mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
-		mv $SOURCEFILE.wav.resample.wav ${OUTFILENAMENOEXT}.txt
-		echo "100|Transkript hotowe|1|0|0|0" >> $PROGRESS
+		mv $SOURCEFILE.wav.resample.txt ${OUTFILENAMENOEXT}.txt
+		mv $SOURCEFILE.wav.resample.srt ${OUTFILENAMENOEXT}.de.srt
+		echo "100|Transkript hotowe|1|0|0|1" >> $PROGRESS
 		;;
 		
 	DEVEL)

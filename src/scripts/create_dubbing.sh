@@ -13,14 +13,51 @@ echo "Postup=$PROGRESS"
 echo "MaSRT=$SRTAVAILABLE"
 echo "SRTFILE=$SRTFILE"
 
+OUTFILENAMENOEXT="${SOURCEFILE%.*}"
+CWD=$(pwd)
+
+OUTFILENAMENOEXT=$(echo $OUTFILENAMENOEXT | sed -e s/audioFile\///)
+
+echo "Basename for saving results: $OUTFILENAMENOEXT"
+
+echo "SOTRA_URL=$SOTRA_URL"
+echo "HF_TOKEN=$HF_TOKEN"
+
 touch $PROGRESS
 
 echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
 
+INFOLDERNAME=${CWD}/uploads/${FOLDERNAME}/input/
+mkdir -p $INFOLDERNAME
+
+INSOURCENAME=${INFOLDERNAME}/$(basename $SOURCEFILE)
+INSRTNAME==${INFOLDERNAME}/$(basename $SRTFILE)
+
+echo "---> New input files: $INSOURCENAME , $INSRTNAME"
+
 if [ "$SRTAVAILABLE" = "true" ]; then
-	$(dirname $0)/dubbing.sh $SOURCEFILE $FOLDERNAME $SRTFILE 
+	mv $SOURCEFILE $INFOLDERNAME
+	mv $SRTFILE    $INFOLDERNAME
+	
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/ ${INSRTNAME} 
+
+	# move results to expected places
+	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
+	mv $FOLDERNAME/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
+	
+	# only video and translated subs are available (original subs were provided)
+	echo "100|Dubbing hotowe|0|1|1|0" >> $PROGRESS
 else
-	$(dirname $0)/dubbing.sh $SOURCEFILE $FOLDERNAME
+	mv $SOURCEFILE $INFOLDERNAME
+	
+	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/uploads/${FOLDERNAME}/dubbing/
+
+	# move results to expected places
+	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.hsb.mp4
+	mv $FOLDERNAME/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
+	mv $FOLDERNAME/dubbing/deu.srt              ${OUTFILENAMENOEXT}.de.srt
+	
+	# video and both subs (original, translated) are available
+	echo "100|Dubbing hotowe|0|1|1|1" >> $PROGRESS
 fi
 
-echo "100|Dubbing hotowe|0|0|1|0" >> $PROGRESS
