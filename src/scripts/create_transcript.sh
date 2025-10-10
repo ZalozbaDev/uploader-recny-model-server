@@ -18,7 +18,6 @@ echo "Format=$OUTFORMAT (ignored)"
 echo "Translate=$TRANSLATE"
 echo "DiarizeSpeakers=$DIARIZATION"
 echo "VAD=$VAD"
-echo "SOTRA_URL=$SOTRA_URL"
 
 OUTFILENAMENOEXT="${SOURCEFILE%.*}"
 CWD=$(pwd)
@@ -26,7 +25,6 @@ echo "Output filename w/o ext: $OUTFILENAMENOEXT"
 echo "CWD: $CWD"
 
 echo "SOTRA_URL=$SOTRA_URL"
-
 echo "HF_TOKEN=$HF_TOKEN"
 
 touch $PROGRESS
