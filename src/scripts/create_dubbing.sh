@@ -16,6 +16,10 @@ echo "SRTFILE=$SRTFILE"
 OUTFILENAMENOEXT="${SOURCEFILE%.*}"
 CWD=$(pwd)
 
+OUTFILENAMENOEXT=$(echo $OUTFILENAMENOEXT | sed -e s/audioFile\///)
+
+echo "Basename for saving results: $OUTFILENAMENOEXT"
+
 echo "SOTRA_URL=$SOTRA_URL"
 echo "HF_TOKEN=$HF_TOKEN"
 
@@ -49,7 +53,7 @@ else
 	$(dirname $0)/dubbing.sh ${INSOURCENAME} ${CWD}/${FOLDERNAME}/dubbing/
 
 	# move results to expected places
-	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.mp4
+	mv $FOLDERNAME/dubbing/dubbed_video_hsb.mp4 ${OUTFILENAMENOEXT}.hsb.mp4
 	mv $FOLDERNAME/dubbing/hsb.srt              ${OUTFILENAMENOEXT}.srt
 	mv $FOLDERNAME/dubbing/deu.srt              ${OUTFILENAMENOEXT}.de.srt
 	
