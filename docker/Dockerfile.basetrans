@@ -57,12 +57,16 @@ RUN cd Python-3.10.0 && ./configure --enable-optimizations && make -j8 && make a
 
 RUN mkdir -p /ctranslate2
 
-RUN cd ctranslate2 && python3.10 -m venv .
+RUN apt install -y python3-venv
 
-RUN cd ctranslate2 && /bin/bash -c 'source bin/activate && pip install whisper-ctranslate2==0.4.5'
+RUN cd ctranslate2 && python3 -m venv .
+
+COPY docker/requirements_ctranslate2.txt ctranslate2/
+
+RUN cd ctranslate2 && /bin/bash -c 'source bin/activate && pip install -r requirements_ctranslate2.txt'
 
 #############################
-# whisper-ctranslate2
+# wav2vec2 forcealign
 #############################
 
 RUN mkdir -p /forcealign
