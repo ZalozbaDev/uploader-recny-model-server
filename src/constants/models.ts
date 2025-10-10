@@ -24,6 +24,17 @@ export const models: Model[] = [
     forceAlign: false
   },
   {
+    name: 'HFHSBBIG',
+    title: 'hornjoserbski KI model "Whisper" (dokładny, pomały)',
+    description: 'za rozmołwy wšědneho dnja',
+    srt: true,
+    diarization: true,
+    vad: true,
+    language: Language.HSB,
+    source: 'https://...',
+    forceAlign: false
+  },
+  {
     name: 'HFDSB',
     title: 'delnoserbski KI model "Whisper" (dokładny, pomały)',
     description: 'za rozmołwy wšědneho dnja',
