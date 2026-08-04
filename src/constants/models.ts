@@ -1,4 +1,4 @@
-import { Language } from '../types/common.ts'
+import { Language } from '../types/common.js'
 
 export type Model = {
   name: string

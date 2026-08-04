@@ -1,4 +1,4 @@
-import { removeExtension } from './parser.ts'
+import { removeExtension } from './parser.js'
 
 const illegalRe = /[\/\?<>\\:\*\|"]/g
 const controlRe = /[\x00-\x1f\x80-\x9f]/g

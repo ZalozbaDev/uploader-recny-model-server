@@ -1,8 +1,8 @@
 import { Express } from 'express'
-import { SERVER_MODE } from '../../types/common.ts'
-import { transcript } from './transcript.ts'
-import { slownik } from './slownik.ts'
-import { aiDubbing } from './aiDubbing.ts'
+import { SERVER_MODE } from '../../types/common.js'
+import { transcript } from './transcript.js'
+import { slownik } from './slownik.js'
+import { aiDubbing } from './aiDubbing.js'
 
 export const addUploadRoute = (app: Express) => {
   switch (process.env.SERVER_MODE as SERVER_MODE) {

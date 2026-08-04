@@ -1,10 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { addDownloadRoute } from './routes/download/index.ts'
-import { addStatusRoute } from './routes/status/index.ts'
-import { addUploadRoute } from './routes/upload/index.ts'
-import { SERVER_MODE } from './types/common.ts'
+import { addDownloadRoute } from './routes/download/index.js'
+import { addStatusRoute } from './routes/status/index.js'
+import { addUploadRoute } from './routes/upload/index.js'
+import { SERVER_MODE } from './types/common.js'
 
 //For env File
 dotenv.config()

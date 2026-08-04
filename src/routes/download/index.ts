@@ -1,7 +1,7 @@
 import { Express, Request, Response } from 'express'
-import { removeExtension, parseLexFormat } from '../../helpers/parser.ts'
-import { sanitize } from '../../helpers/sanitize.ts'
-import { isLexFormat } from '../../types/common.ts'
+import { removeExtension, parseLexFormat } from '../../helpers/parser.js'
+import { sanitize } from '../../helpers/sanitize.js'
+import { isLexFormat } from '../../types/common.js'
 
 export const addDownloadRoute = (app: Express) =>
   app.get('/download', async (req: Request, res: Response) => {

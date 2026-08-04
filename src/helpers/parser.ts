@@ -1,4 +1,4 @@
-import { OutputFormat, LexFormat } from '../types/common.ts'
+import { OutputFormat, LexFormat } from '../types/common.js'
 
 export const parseLexFormat = (lexFormat: LexFormat): string => {
   switch (lexFormat) {

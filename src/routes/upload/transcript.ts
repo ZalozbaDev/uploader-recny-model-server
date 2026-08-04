@@ -1,9 +1,9 @@
 import { Express, Request, Response } from 'express'
 import { exec } from 'child_process'
-import { upload } from '../../helpers/multer.ts'
-import { sanitize } from '../../helpers/sanitize.ts'
-import { LanguageModel } from '../../types/common.ts'
-import { models } from '../../constants/models.ts'
+import { upload } from '../../helpers/multer.js'
+import { sanitize } from '../../helpers/sanitize.js'
+import { LanguageModel } from '../../types/common.js'
+import { models } from '../../constants/models.js'
 
 export const transcript = (app: Express) => {
   app.post(

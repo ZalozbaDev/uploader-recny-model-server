@@ -1,6 +1,6 @@
 import { Express, Request, Response } from 'express'
 import { exec } from 'child_process'
-import { upload } from '../../helpers/multer.ts'
+import { upload } from '../../helpers/multer.js'
 
 export const aiDubbing = (app: Express) =>
   app.post(

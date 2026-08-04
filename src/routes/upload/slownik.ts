@@ -1,8 +1,8 @@
 import { Express, Request, Response } from 'express'
 import { exec } from 'child_process'
-import { upload } from '../../helpers/multer.ts'
-import { sanitize } from '../../helpers/sanitize.ts'
-import { LanguageModel } from '../../types/common.ts'
+import { upload } from '../../helpers/multer.js'
+import { sanitize } from '../../helpers/sanitize.js'
+import { LanguageModel } from '../../types/common.js'
 
 export const slownik = (app: Express) =>
   app.post(
