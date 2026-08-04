@@ -8,7 +8,7 @@ RUN npm ci
 COPY tsconfig.json ./
 ADD src/ ./src/
 RUN npm run build
-RUN ls -l
+# RUN ls -l
 
 ########### deployment container
 FROM node:24
@@ -32,9 +32,9 @@ RUN mkdir -p src/scripts
 COPY src/scripts/create_dictionary.sh src/scripts
 
 ENV NODE_ENV=production
-ENV PORT=3000
+# ENV PORT=3000
 
-EXPOSE 3000
+# EXPOSE 3000
 
 ENV SERVER_MODE=FONETISIKI_SLOWNIK
 
