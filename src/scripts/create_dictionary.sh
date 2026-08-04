@@ -36,8 +36,8 @@ echo "0|Wobdźěłam $CORPUS" >> $PROGRESS
 
 # copy tooling and config from external repo
 mkdir -p uploads/$FOLDERNAME/corpus_creator/
-cp -r /speech_recognition_corpus_creation/examples/ex9/configuration uploads/$FOLDERNAME/corpus_creator/
-cp -r /speech_recognition_corpus_creation/examples/ex9/tooling       uploads/$FOLDERNAME/corpus_creator/
+cp -r speech_recognition_corpus_creation/examples/ex9/configuration uploads/$FOLDERNAME/corpus_creator/
+cp -r speech_recognition_corpus_creation/examples/ex9/tooling       uploads/$FOLDERNAME/corpus_creator/
 mkdir -p uploads/$FOLDERNAME/corpus_creator/resources/
 
 echo "10" > $PROGRESS.tmp # strip the decimal part
