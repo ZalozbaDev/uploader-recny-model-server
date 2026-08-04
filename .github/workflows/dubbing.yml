@@ -1,4 +1,4 @@
-name: frontend-ci
+name: dubbing-ci
 on:
   workflow_dispatch:
   pull_request:
