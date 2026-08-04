@@ -1,25 +1,49 @@
-FROM offline_transcription_basetrans:latest
-MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+################ build container for whisper.cpp / docker_vosk cmdline
+FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04 AS whisper_builder
 
-# docker build -f docker/Dockerfile.transcription -t offline_transcription_back .
-# docker build -f docker/Dockerfile.transcription -t offline_transcription_back . --no-cache
+WORKDIR /opt/build
 
+RUN git clone https://github.com/ZalozbaDev/whisper.cpp.git
+RUN cd whisper.cpp && git checkout v1.8.6
 
-# copy files from local and install
+ENV CUDA_MAIN_VERSION=13.1
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA_MAIN_VERSION}/compat:$LD_LIBRARY_PATH
+RUN cd whisper.cpp/ && cmake -B build -DGGML_CUDA=1 -DCMAKE_CUDA_ARCHITECTURES=89 && cmake --build build -j4 --config Release
 
-RUN mkdir -p /uploader-recny-model-server/src
+RUN apt update && apt install -y libhunspell-dev libicu-dev libsndfile1-dev build-essential zlib1g-dev meson libabsl-dev \
+    libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
-COPY src                                          /uploader-recny-model-server/src
+RUN git clone https://github.com/ZalozbaDev/docker_vosk.git
+RUN cd docker_vosk && git checkout webcaptioner_v2.2.0
 
-RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+RUN cd docker_vosk/common/cmdline/ && git clone https://github.com/ZalozbaDev/webrtc-audio-processing.git \
+    && cd webrtc-audio-processing && git checkout 6e37f37c4ea8790760b4c55d9ce9024a7e7bf260 \ 
+    && meson . build -Dprefix=$PWD/install && ninja -C build
 
-COPY docker/startme_transcription.sh /
+RUN cd docker_vosk/common/cmdline/ && ln -s ../../../whisper.cpp whisper.cpp
 
-RUN mkdir -p /proprietary
+RUN cd docker_vosk/common/cmdline/ && ./build_recikts.sh
+RUN cd docker_vosk/common/cmdline/ && ./build_whisper_noaccel.sh
 
-RUN mkdir -p /whisper
+###################################################
 
-RUN mkdir -p /fairseqdata
+#FROM offline_transcription_basetrans:latest
+#MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
 
-CMD ["/bin/bash", "-c", "/startme_transcription.sh"] 
+#RUN mkdir -p /uploader-recny-model-server/src
+
+#COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
+#COPY src                                          /uploader-recny-model-server/src
+
+#RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+
+#COPY docker/startme_transcription.sh /
+
+#RUN mkdir -p /proprietary
+
+#RUN mkdir -p /whisper
+
+#RUN mkdir -p /fairseqdata
+
+#CMD ["/bin/bash", "-c", "/startme_transcription.sh"] 
