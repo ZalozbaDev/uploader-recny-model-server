@@ -18,7 +18,7 @@ jobs:
       contents: read
       packages: write
     env:
-      DOCKER_IMAGE_NAME: ${{ github.repository }}-frontend
+      DOCKER_IMAGE_NAME: ${{ github.repository }}-phonetics
       PUSH: ${{ toJSON(github.event_name != 'pull_request') }}
     steps:
       # Setup Docker Environment
