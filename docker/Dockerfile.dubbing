@@ -41,7 +41,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-COPY --from=phoneticsbuild /app/dist ./dist
+COPY --from=dubbingbuildpython /app/dist ./dist
 
 RUN mkdir -p uploads
 
