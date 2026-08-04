@@ -1,26 +1,36 @@
-FROM node:20.11.1-bookworm
-MAINTAINER Daniel Sobe <daniel.sobe@sorben.com>
+########### build container
+FROM node:24 AS phoneticsbuild
+WORKDIR /app
 
-# docker build -f docker/Dockerfile.phonetics -t phonetics_back .
-# docker build -f docker/Dockerfile.phonetics -t phonetics_back . --no-cache
+COPY package*.json ./
+RUN npm ci
+
+COPY tsconfig.json ./
+ADD src/ ./src/
+RUN npm run build
+RUN ls -l
+
+########### deployment container
+FROM node:24
+WORKDIR /app
 
 RUN git clone https://github.com/ZalozbaDev/speech_recognition_corpus_creation.git
-
 RUN cd speech_recognition_corpus_creation && git checkout 68596c9384adfd073aefc84ee5c0f4393b04b1b5
-
 RUN apt update
-
 RUN apt install -y python3-numpy python3-yaml
 
-# copy files from local and install
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-RUN mkdir -p /uploader-recny-model-server/src
+COPY --from=phoneticsbuild /app/dist ./dist
+RUN mv speech_recognition_corpus_creation dist/
+RUN mkdir -p uploads
 
-COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
-COPY src                                          /uploader-recny-model-server/src
+ENV NODE_ENV=production
+ENV PORT=3000
 
-RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+EXPOSE 3000
 
-COPY docker/startme_phonetics.sh /
+ENV SERVER_MODE=FONETISIKI_SLOWNIK
 
-CMD ["/bin/bash", "-c", "/startme_phonetics.sh"] 
+CMD ["node", "dist/index.js"]
