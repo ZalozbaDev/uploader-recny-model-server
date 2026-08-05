@@ -31,7 +31,7 @@ FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04 AS python_builder
 
 WORKDIR /opt/venv/
 
-RUN apt update && apt install -y python3-venv && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y python3-venv python3-dev && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m venv /opt/venv/ctranslate2
 COPY docker/requirements_ctranslate2.txt /opt/
@@ -65,6 +65,8 @@ LABEL com.nvidia.cuda.version="12.6"
 LABEL license="Includes NVIDIA CUDA redistributables subject to NVIDIA EULA"
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y python3 nodejs npm && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/app/src
 
