@@ -13,30 +13,19 @@ export type Model = {
 }
 export const models: Model[] = [
   {
-    name: 'HFHSB',
-    title: 'hornjoserbski KI model "Whisper" (doporučeny)',
-    description: 'powšitkowne rozmołwy',
-    srt: true,
-    diarization: true,
-    vad: true,
-    language: Language.HSB,
-    source: 'https://huggingface.co/spaces/Korla/hsb_stt_demo',
-    forceAlign: false
-  },
-  {
     name: 'HFHSBBIG',
-    title: 'hornjoserbski KI model "Whisper" (dokładny, pomały)',
+    title: 'hornjoserbski KI model "Whisper" (doporučene)',
     description: 'za rozmołwy wšědneho dnja',
     srt: true,
     diarization: true,
     vad: true,
     language: Language.HSB,
-    source: 'https://huggingface.co/Korla/whisper-large-v3-turbo-hsb',
+    source: 'https://huggingface.co/Korla/whisper-large-v3-turbo-hsb-v1',
     forceAlign: false
   },
   {
     name: 'HFDSB',
-    title: 'delnoserbski KI model "Whisper" (dokładny, pomały)',
+    title: 'delnoserbski KI model "Whisper" (doporučene)',
     description: 'za rozmołwy wšědneho dnja',
     srt: true,
     diarization: true,

@@ -39,9 +39,9 @@ WHISPER_MODEL_GERMAN=large-v2
 
 case $MODEL in
 
-	HFHSB)
-		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_HSB $PROGRESS $TRANSLATE $DIARIZATION $VAD
-		;;
+#	HFHSB)
+#		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_HSB $PROGRESS $TRANSLATE $DIARIZATION $VAD
+#		;;
 	
 	HFHSBBIG)
 		$(dirname $0)/transcript_whisper.sh $FOLDERNAME $SOURCEFILE $WHISPER_MODEL_HSB_BIG $PROGRESS $TRANSLATE $DIARIZATION $VAD
@@ -164,31 +164,31 @@ case $MODEL in
 		echo "100|Podtitle hotowe|1|0|0|0" >> $PROGRESS
 		;;
 
-	FB)
+#	FB)
 		#### currently unused ###############
-		if [ "$OUTFORMAT" = "text" ]; then
-			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
-			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
-			DURATION=$(soxi -D $SOURCEFILE.wav)
-			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
-			cat $PROGRESS >> $PROGRESS.tmp
-			mv $PROGRESS.tmp $PROGRESS
-			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
-			echo "20|Resampling hotowe" >> $PROGRESS
-			echo "test test test" > $SOURCEFILE.trl.resample.trl
-			export USER=$FOLDERNAME
-			pushd /fairseq
-			source bin/activate
-			python /fairseq/examples/mms/asr/infer/mms_infer.py --model /fairseqdata/mms1b_all.pt  --lang hsb --audio /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav --format letter > /uploader-recny-model-server/$SOURCEFILE.log
-			popd
-			echo "80|Spóznawanje hotowe" >> $PROGRESS
-			mv $SOURCEFILE.log ${SOURCEFILE}.${OUTFORMAT}
-			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
-			echo "100|Podtitle hotowe" >> $PROGRESS
-		else
-			echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
-		fi
-		;;
+#		if [ "$OUTFORMAT" = "text" ]; then
+#			echo "0|Wobdźěłam $SOURCEFILE" >> $PROGRESS
+#			ffmpeg -i $SOURCEFILE $SOURCEFILE.wav
+#			DURATION=$(soxi -D $SOURCEFILE.wav)
+#			echo ${DURATION%.*} > $PROGRESS.tmp # strip the decimal part
+#			cat $PROGRESS >> $PROGRESS.tmp
+#			mv $PROGRESS.tmp $PROGRESS
+#			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
+#			echo "20|Resampling hotowe" >> $PROGRESS
+#			echo "test test test" > $SOURCEFILE.trl.resample.trl
+#			export USER=$FOLDERNAME
+#			pushd /fairseq
+#			source bin/activate
+#			python /fairseq/examples/mms/asr/infer/mms_infer.py --model /fairseqdata/mms1b_all.pt  --lang hsb --audio /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav --format letter > /uploader-recny-model-server/$SOURCEFILE.log
+#			popd
+#			echo "80|Spóznawanje hotowe" >> $PROGRESS
+#			mv $SOURCEFILE.log ${SOURCEFILE}.${OUTFORMAT}
+#			ln -s $(basename $SOURCEFILE.text) $(echo "${SOURCEFILE%.*}".text)
+#			echo "100|Podtitle hotowe" >> $PROGRESS
+#		else
+#			echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
+#		fi
+#		;;
 	
 	*)
 		echo "100|Tuta warianta hišće njeje přistupna!" >> $PROGRESS
