@@ -1,6 +1,6 @@
 import multer from 'multer'
 import * as fs from 'fs'
-import { SERVER_MODE } from '../types/common.ts'
+import { SERVER_MODE } from '../types/common.js'
 
 // setup multer for file upload
 const storage = multer.diskStorage({

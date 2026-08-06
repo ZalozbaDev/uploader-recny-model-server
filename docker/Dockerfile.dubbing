@@ -1,30 +1,57 @@
-FROM node:20.11.1-bookworm
+########### build container (node)
+FROM node:24-bookworm AS dubbingbuildnode
+WORKDIR /app
 
-# docker build -f docker/Dockerfile.dubbing -t dubbing_back .
-# docker build -f docker/Dockerfile.dubbing -t dubbing_back . --no-cache
+COPY package*.json ./
+RUN npm ci
 
-RUN apt update && apt install -y python3.11-venv
+COPY tsconfig.json ./
+ADD src/ ./src/
+RUN npm run build
+# RUN ls -l
+
+########### build container (python)
+FROM nvidia/cuda:13.1.1-cudnn-devel-ubuntu24.04 AS dubbingbuildpython
+WORKDIR /opt/venv
+
+RUN apt update && apt install -y python3-venv ffmpeg sox git && rm -rf /var/lib/apt/lists/*
+
+RUN touch d
 
 RUN git clone https://github.com/ZalozbaDev/open-dubbing
-
 RUN cd open-dubbing && python3 -m venv .
-
 COPY docker/requirements_dubbing.txt open-dubbing/
-
 RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install -r requirements_dubbing.txt'
 RUN cd open-dubbing && /bin/bash -c 'source bin/activate && pip install .'
 
-RUN apt install -y ffmpeg sox
+########### runtime container
+FROM nvidia/cuda:13.1.1-runtime-ubuntu24.04
 
-# copy files from local and install
+LABEL com.nvidia.cuda.version="12.6"
+LABEL license="Includes NVIDIA CUDA redistributables subject to NVIDIA EULA"
 
-RUN mkdir -p /uploader-recny-model-server/src
+ENV DEBIAN_FRONTEND=noninteractive
 
-COPY package.json package-lock.json tsconfig.json /uploader-recny-model-server
-COPY src                                          /uploader-recny-model-server/src
+WORKDIR /usr/app/src
 
-RUN cd uploader-recny-model-server && mkdir -p uploads && npm install
+RUN apt update && apt install -y python3 libpython3.12 ffmpeg sox nodejs npm && rm -rf /var/lib/apt/lists/*
 
-COPY docker/startme_dubbing.sh /
+# venv übernehmen
+COPY --from=dubbingbuildpython /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-CMD ["/bin/bash", "-c", "/startme_dubbing.sh"] 
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=dubbingbuildnode /app/dist ./dist
+
+RUN mkdir -p uploads
+
+RUN mkdir -p src/scripts
+COPY src/scripts/create_dubbing.sh src/scripts
+COPY src/scripts/dubbing.sh        src/scripts
+
+ENV NODE_ENV=production
+ENV SERVER_MODE=DUBBING
+
+CMD ["node", "dist/index.js"]
