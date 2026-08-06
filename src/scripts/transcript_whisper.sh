@@ -42,7 +42,8 @@ if [ "$VAD" = "true" ]; then
 	
 	sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 	echo "20|Resampling hotowe" >> $PROGRESS
-	LD_LIBRARY_PATH=/opt/whisper_out/ /opt/whisper_out/whisper_main $MODEL $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
+	LD_LIBRARY_PATH=/opt/whisper_out/:/opt/onnxruntime-linux-x64-1.12.1/lib/:/opt/whisper.cpp/build/ggml/src/:/opt/whisper.cpp/build/src/:/opt/whisper.cpp/build/ggml/src/ggml-cuda/ \
+	    /opt/whisper_out/whisper_main $MODEL $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 	
 	mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
 	mv uploads/${FOLDERNAME}/transcript.txt ${OUTFILENAMENOEXT}.txt

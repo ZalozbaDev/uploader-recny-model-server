@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd /forcealign
+pushd /opt/venv/forcealign
 source bin/activate
 
 echo "SRT translation called with args $1 $2 $3 $4 $5"

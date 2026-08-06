@@ -72,14 +72,15 @@ LABEL license="Includes NVIDIA CUDA redistributables subject to NVIDIA EULA"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install -y python3 ffmpeg sox nodejs npm && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y python3 ffmpeg sox nodejs npm libhunspell-1.7-0 libresample1 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/app/src
 
 # whisper.cpp / cmdline übernehmen
-COPY --from=whisper_builder /opt/build/whisper.cpp                            /opt/whisper.cpp
-COPY --from=whisper_builder /opt/build/docker_vosk/common/cmdline/whisper_out /opt/whisper_out
-COPY --from=whisper_builder /opt/build/docker_vosk/common/cmdline/recikts_out /opt/recikts_out
+COPY --from=whisper_builder /opt/build/whisper.cpp                                             /opt/whisper.cpp
+COPY --from=whisper_builder /opt/build/docker_vosk/common/cmdline/whisper_out                  /opt/whisper_out
+COPY --from=whisper_builder /opt/build/docker_vosk/common/cmdline/recikts_out                  /opt/recikts_out
+COPY --from=whisper_builder /opt/build/docker_vosk/common/cmdline/onnxruntime-linux-x64-1.12.1 /opt/onnxruntime-linux-x64-1.12.1
 
 # python apps übernehmen
 COPY --from=python_builder /opt/venv /opt/venv
