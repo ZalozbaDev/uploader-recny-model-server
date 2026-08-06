@@ -16,7 +16,7 @@ WORKDIR /opt/venv
 
 RUN apt update && apt install -y python3-venv ffmpeg sox git && rm -rf /var/lib/apt/lists/*
 
-RUN touch a
+RUN touch d
 
 RUN git clone https://github.com/ZalozbaDev/open-dubbing
 RUN cd open-dubbing && python3 -m venv .
@@ -34,7 +34,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /usr/app/src
 
-RUN apt update && apt install -y python3 ffmpeg sox nodejs npm && rm -rf /var/lib/apt/lists/*
+RUN apt update && apt install -y python3 libpython3.12 ffmpeg sox nodejs npm && rm -rf /var/lib/apt/lists/*
 
 # venv übernehmen
 COPY --from=dubbingbuildpython /opt/venv /opt/venv

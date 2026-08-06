@@ -18,9 +18,12 @@ OUTDIR=$2
 echo "SOTRA_URL=$SOTRA_URL"
 echo "HF_TOKEN=$HF_TOKEN"
 
+export TORCH_FORCE_WEIGHTS_ONLY_LOAD=0
+
 if [ "$#" -eq 3 ]; then
 	echo "Have SRT"
 	SUBSFILE=$3
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./lib/python3.12/site-packages/nvidia/cudnn/lib/ \
 	open-dubbing --input_file $FILENAME --source_language deu --target_language hsb \
 	--hugging_face_token $HF_TOKEN --output_directory $OUTDIR \
 	--translator sotra --apertium_server $SOTRA_URL \
@@ -29,6 +32,7 @@ if [ "$#" -eq 3 ]; then
 	--device ${OPENDUBBING_DEVICE}
 else
 	echo "do not have SRT"
+	LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./lib/python3.12/site-packages/nvidia/cudnn/lib/ \
 	open-dubbing --input_file $FILENAME --source_language deu --target_language hsb \
 	--hugging_face_token $HF_TOKEN --output_directory $OUTDIR \
 	--translator sotra --apertium_server $SOTRA_URL \
