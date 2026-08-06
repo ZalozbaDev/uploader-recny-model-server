@@ -32,7 +32,7 @@ touch $PROGRESS
 # list all currently used models here
 
 RECIKTS_MODEL_BOZA_MSA=misa_2024_08_02.cfg
-WHISPER_MODEL_HSB_BIG=/usr/app/src/whisper/Korla/whisper_large_v3_turbo_hsb/ggml-model.bin
+WHISPER_MODEL_HSB_BIG=/usr/app/src/whisper/Korla/whisper_large_v3_turbo_hsb-v1/ggml-model.bin
 WHISPER_MODEL_DSB_BIG=/usr/app/src/whisper/Korla/whisper_large_v3_turbo_dsb/ggml-model.bin
 WHISPER_MODEL_GERMAN=large-v2
 
