@@ -32,9 +32,8 @@ touch $PROGRESS
 # list all currently used models here
 
 RECIKTS_MODEL_BOZA_MSA=misa_2024_08_02.cfg
-WHISPER_MODEL_HSB=/whisper/hsb/whisper_small/ggml-model.bin
-WHISPER_MODEL_HSB_BIG=/whisper/Korla/whisper_large_v3_turbo_hsb/ggml-model.bin
-WHISPER_MODEL_DSB_BIG=/whisper/Korla/whisper_large_v3_turbo_dsb/ggml-model.bin
+WHISPER_MODEL_HSB_BIG=/usr/app/src/whisper/Korla/whisper_large_v3_turbo_hsb/ggml-model.bin
+WHISPER_MODEL_DSB_BIG=/usr/app/src/whisper/Korla/whisper_large_v3_turbo_dsb/ggml-model.bin
 WHISPER_MODEL_GERMAN=large-v2
 
 case $MODEL in
@@ -67,7 +66,7 @@ case $MODEL in
 			
 			sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /recikts_main /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
+			LD_LIBRARY_PATH=/usr/app/src/proprietary /opt/recikts_out/recikts_main /usr/app/src/proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav ./uploads/${FOLDERNAME} > ./uploads/${FOLDERNAME}/log.txt 2>&1
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			
 			mv uploads/${FOLDERNAME}/subtitles.srt ${OUTFILENAMENOEXT}.srt
@@ -89,7 +88,7 @@ case $MODEL in
 			
 			sox $SOURCEFILE.wav -r 16000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 			echo "20|Resampling hotowe" >> $PROGRESS
-			LD_LIBRARY_PATH=/proprietary /proprietary/testrec /proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
+			LD_LIBRARY_PATH=/usr/app/src/proprietary /usr/app/src/proprietary/testrec /usr/app/src/proprietary/$RECIKTS_MODEL_BOZA_MSA $SOURCEFILE.wav.resample.wav | tee $SOURCEFILE.wav.resample.wav.rec.log
 			echo "80|Spóznawanje hotowe" >> $PROGRESS
 			
 			python3 $(dirname $0)/log2srt.py $SOURCEFILE.wav.resample.wav.rec.log
@@ -122,7 +121,7 @@ case $MODEL in
 		sox $SOURCEFILE.wav -r 48000 -c 1 -b 16 $SOURCEFILE.wav.resample.wav
 		echo "20|Resampling hotowe" >> $PROGRESS
 		
-		pushd /ctranslate2
+		pushd /opt/venv/ctranslate2
 		source bin/activate
 		
 		if [ "$DIARIZATION" -gt 0 ]; then
