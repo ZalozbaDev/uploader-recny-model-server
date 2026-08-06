@@ -126,14 +126,14 @@ case $MODEL in
 		
 		if [ "$DIARIZATION" -gt 0 ]; then
 			# with speaker diarization
-			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --hf_token $HF_TOKEN --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /usr/app/src/uploads/${FOLDERNAME}/ --device cuda --hf_token $HF_TOKEN --language de /usr/app/src/$SOURCEFILE.wav.resample.wav > /usr/app/src/uploads/${FOLDERNAME}/log.log 2>&1
 		else
 			# no speaker diarization
-			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /uploader-recny-model-server/uploads/${FOLDERNAME}/ --device cpu --language de /uploader-recny-model-server/$SOURCEFILE.wav.resample.wav > /uploader-recny-model-server/uploads/${FOLDERNAME}/log.log 2>&1
+			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /usr/app/src/uploads/${FOLDERNAME}/ --device cuda --language de /usr/app/src/$SOURCEFILE.wav.resample.wav > /usr/app/src/uploads/${FOLDERNAME}/log.log 2>&1
 		fi
 		popd
 
-		ls -l /uploader-recny-model-server/uploads/${FOLDERNAME}/
+		ls -l /usr/app/src/uploads/${FOLDERNAME}/
 		
 		# TBD which filename?
 		# mv ${SOURCEFILE%.*}*.txt $(echo "${SOURCEFILE%.*}".txt)
