@@ -43,10 +43,10 @@ RUN apt update && apt install -y python3 ffmpeg sox nodejs npm libhunspell-1.7-0
 WORKDIR /usr/app/src
 
 # whisper.cpp / cmdline übernehmen
-COPY --from=ghcr.io/zalozbadev/docker_vosk/cmdline:latest /opt/build/whisper.cpp                                 /opt/whisper.cpp
-COPY --from=ghcr.io/zalozbadev/docker_vosk/cmdline:latest /opt/build/common/cmdline/whisper_out                  /opt/whisper_out
-COPY --from=ghcr.io/zalozbadev/docker_vosk/cmdline:latest /opt/build/common/cmdline/recikts_out                  /opt/recikts_out
-COPY --from=ghcr.io/zalozbadev/docker_vosk/cmdline:latest /opt/build/common/cmdline/onnxruntime-linux-x64-1.12.1 /opt/onnxruntime-linux-x64-1.12.1
+COPY --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/whisper.cpp                                 /opt/whisper.cpp
+COPY --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/whisper_out                  /opt/whisper_out
+COPY --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/recikts_out                  /opt/recikts_out
+COPY --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/onnxruntime-linux-x64-1.12.1 /opt/onnxruntime-linux-x64-1.12.1
 
 # python apps übernehmen
 COPY --from=python_builder /opt/venv /opt/venv
