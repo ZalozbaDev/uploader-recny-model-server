@@ -17,6 +17,8 @@ RUN cd /opt/venv/forcealign && /bin/bash -c 'source bin/activate && pip3 install
 
 COPY src/scripts/align_wav2vec2.py          /opt/venv/forcealign/
 COPY src/scripts/translate_srt_sotra_lsf.py /opt/venv/forcealign/
+COPY src/scripts/log2srt.py                 /opt/venv/forcealign/
+COPY src/scripts/log2txt.py                 /opt/venv/forcealign/
 
 ################ build container for node
 FROM node:24 AS node_builder
