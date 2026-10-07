@@ -130,6 +130,10 @@ case $MODEL in
 		pushd /opt/venv/ctranslate2
 		source bin/activate
 		
+		# somehow this path needs to be specified manually
+		export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/venv/ctranslate2/lib/python3.12/site-packages/nvidia/cublas/lib/
+		echo $LD_LIBRARY_PATH
+
 		if [ "$DIARIZATION" -gt 0 ]; then
 			# with speaker diarization
 			whisper-ctranslate2 --model $WHISPER_MODEL_GERMAN --output_dir /usr/app/src/uploads/${FOLDERNAME}/ --device cuda --hf_token $HF_TOKEN --language de /usr/app/src/$SOURCEFILE.wav.resample.wav > /usr/app/src/uploads/${FOLDERNAME}/log.log 2>&1
