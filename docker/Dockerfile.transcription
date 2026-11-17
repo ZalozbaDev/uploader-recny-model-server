@@ -45,10 +45,10 @@ RUN apt update && apt install -y python3 ffmpeg sox nodejs npm libhunspell-1.7-0
 WORKDIR /usr/app/src
 
 # whisper.cpp / cmdline übernehmen
-COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/whisper.cpp                                 /opt/whisper.cpp
-COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/whisper_out                  /opt/whisper_out
-COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/recikts_out                  /opt/recikts_out
-COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:unify_recognizers /opt/build/common/cmdline/onnxruntime-linux-x64-1.12.1 /opt/onnxruntime-linux-x64-1.12.1
+COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:v2.6.0 /opt/build/whisper.cpp                                 /opt/whisper.cpp
+COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:v2.6.0 /opt/build/common/cmdline/whisper_out                  /opt/whisper_out
+COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:v2.6.0 /opt/build/common/cmdline/recikts_out                  /opt/recikts_out
+COPY --chown=1000:1000 --from=ghcr.io/zalozbadev/docker_vosk-cmdline:v2.6.0 /opt/build/common/cmdline/onnxruntime-linux-x64-1.12.1 /opt/onnxruntime-linux-x64-1.12.1
 
 # python apps übernehmen
 COPY --chown=1000:1000 --from=python_builder /opt/venv /opt/venv
